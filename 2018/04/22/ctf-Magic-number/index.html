@@ -108,24 +108,24 @@
 
 
 
-  <meta name="description" content="Practise makes perfect!">
+  <meta name="description" content="一道 crypto 的题目因为涉及到递归，写了半天也没写出来，下面为参考大佬的思路。 题目描述如下：1.Given n(1&amp;lt;=n&amp;lt;=14) integers a1,a2,…,an in interval [0,1024), you should determine them by sending several queries.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Test">
-<meta property="og:url" content="https://mf-x.github.io/2018/11/05/Test/index.html">
+<meta property="og:title" content="*ctf Magic_number">
+<meta property="og:url" content="https://mf-x.github.io/2018/04/22/ctf-Magic-number/index.html">
 <meta property="og:site_name" content="ivan">
-<meta property="og:description" content="Practise makes perfect!">
+<meta property="og:description" content="一道 crypto 的题目因为涉及到递归，写了半天也没写出来，下面为参考大佬的思路。 题目描述如下：1.Given n(1&amp;lt;=n&amp;lt;=14) integers a1,a2,…,an in interval [0,1024), you should determine them by sending several queries.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-11-05T06:54:58.941Z">
+<meta property="og:updated_time" content="2018-11-06T06:58:44.291Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Test">
-<meta name="twitter:description" content="Practise makes perfect!">
+<meta name="twitter:title" content="*ctf Magic_number">
+<meta name="twitter:description" content="一道 crypto 的题目因为涉及到递归，写了半天也没写出来，下面为参考大佬的思路。 题目描述如下：1.Given n(1&amp;lt;=n&amp;lt;=14) integers a1,a2,…,an in interval [0,1024), you should determine them by sending several queries.">
 
 
 
 
 
 
-  <link rel="canonical" href="https://mf-x.github.io/2018/11/05/Test/">
+  <link rel="canonical" href="https://mf-x.github.io/2018/04/22/ctf-Magic-number/">
 
 
 
@@ -135,7 +135,7 @@
   };
 </script>
 
-  <title>Test | ivan</title>
+  <title>*ctf Magic_number | ivan</title>
   
 
 
@@ -329,7 +329,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2018/11/05/Test/">
+    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2018/04/22/ctf-Magic-number/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ivan Mo">
@@ -346,7 +346,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Test
+          <h1 class="post-title" itemprop="name headline">*ctf Magic_number
               
             
           </h1>
@@ -371,9 +371,25 @@
                 
               
 
-              <time title="Created: 2018-11-05 14:54:58" itemprop="dateCreated datePublished" datetime="2018-11-05T14:54:58+08:00">2018-11-05</time>
+              <time title="Created: 2018-04-22 14:52:29" itemprop="dateCreated datePublished" datetime="2018-04-22T14:52:29+08:00">2018-04-22</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-11-06 14:58:44" itemprop="dateModified" datetime="2018-11-06T14:58:44+08:00">2018-11-06</time>
+              
             
           </span>
 
@@ -405,7 +421,20 @@
       
 
       
-        
+        <h4 id="一道-crypto-的题目"><a href="#一道-crypto-的题目" class="headerlink" title="一道 crypto 的题目"></a>一道 crypto 的题目</h4><p>因为涉及到递归，写了半天也没写出来，下面为参考大佬的思路。</p>
+<p>题目描述如下：<br>1.Given n(1&lt;=n&lt;=14) integers a1,a2,…,an in interval [0,1024), you should determine them by sending several queries.</p>
+<a id="more"></a>
+<p>2.For each query, you can ask “how many integers are in interval [l,r)?” through stdout in format “? l r” where 0&lt;=l&lt;r&lt;=1024, and you will recieve an integer through stdin as the answer.</p>
+<p>3.Finally, if all the integers are determined, you should output them in arbitrary order and in format “! a1 a2 … an”.</p>
+<p>4.Please notice that some of the integers can be the same and that you can send no more than 99 queries in each level.</p>
+<p>每个level会告诉你有多少个数，如下<code>Level 0 : n = 1</code></p>
+<p>可以使用形如<code>? n m</code>查询[n,m)之间有多少个数，每个level最多查询99次</p>
+<p>最后可以用形如<code>! a1 a2 ... an</code>来提交答案</p>
+<p>方法很明显，类似二分法，每次查一半。<br>具体描述如下，每次level调用search函数，search函数递归的调用find函数。</p>
+<p>find函数：<br>    首先判断所以查找的区间是否正好差1，如果是代表此时的first为其中一个结果，当因为可能有重复，所以乘上所需找的个数，其实就是重复的次数。<br>    然后去查找所需查找区间的前一半有多少个数，而后一半的数则为，总数减去前一半的。<br>    最后，如果前后都大于零则，递归调用find查找前后两部分，然后想家。如果其中一个大于零，则调用find查找大于零的那一部分。</p>
+<p>详细脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">search</span><span class="params">(con)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">find</span><span class="params">(left, right, nums)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> left == right - <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> [left] * nums</span><br><span class="line"></span><br><span class="line">        mid = (left + right) / <span class="number">2</span></span><br><span class="line">        con.sendline(<span class="string">'? %d %d'</span> % (left, mid))</span><br><span class="line">    </span><br><span class="line">        left_num = int(con.recvline()[:<span class="number">-1</span>])</span><br><span class="line">        right_num = nums - left_num</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">if</span> left_num &amp;gt; <span class="number">0</span> <span class="keyword">and</span> right_num &amp;gt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> find(left,mid,left_num) + find(mid,right,right_num)</span><br><span class="line">        <span class="keyword">elif</span> left_num &amp;gt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> find(left,mid,left_num)</span><br><span class="line">        <span class="keyword">elif</span> right_num &amp;gt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> find(mid,right,right_num)</span><br><span class="line">    </span><br><span class="line">    con.recvuntil(<span class="string">'------------------------\n'</span>)</span><br><span class="line">    info = con.recvline()[:<span class="number">-1</span>]</span><br><span class="line">    con.info(info)</span><br><span class="line">    level, n = re.match(<span class="string">r'^Level (\d+) : n = (\d+)$'</span>,info).groups()</span><br><span class="line">    ret_list = find(<span class="number">0</span>,<span class="number">1024</span>,int(n))</span><br><span class="line">    ret = <span class="string">' '</span>.join(map(str,ret_list))</span><br><span class="line">    con.info(<span class="string">'Result %s'</span>%ret)</span><br><span class="line">    con.sendline(<span class="string">'! %s'</span>%ret)</span><br><span class="line"></span><br><span class="line">con = remote(<span class="string">'47.89.18.224'</span>, <span class="number">10011</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">    search(con)</span><br><span class="line"></span><br><span class="line">con.interactive()</span><br></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -432,8 +461,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/16/国立台湾大学-pwn视频/" rel="next" title="国立台湾大学 pwn视频">
-                <i class="fa fa-chevron-left"></i> 国立台湾大学 pwn视频
+              <a href="/2018/04/03/强网杯-StreamGame3/" rel="next" title="强网杯 StreamGame3">
+                <i class="fa fa-chevron-left"></i> 强网杯 StreamGame3
               </a>
             
           </div>
@@ -441,6 +470,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/28/24点计算器-by-Python-带去重）/" rel="prev" title="24点计算器 by Python (带去重）">
+                24点计算器 by Python (带去重） <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -485,8 +518,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -514,6 +556,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一道-crypto-的题目"><span class="nav-number">1.</span> <span class="nav-text">一道 crypto 的题目</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

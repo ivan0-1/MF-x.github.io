@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.5.0',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '7MJODQTH3W',
+      apiKey: 'd8c6f430a78a240fd1e1b165418d1c45',
+      indexName: 'Github',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1.这题和其他的几题，例如streamgame1、2、4，有点不一样，因为直接爆破可能性太多了，根本不可行，所以我们有必要好好分析一下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="强网杯 StreamGame3">
+<meta property="og:url" content="https://mf-x.github.io/2018/04/03/强网杯-StreamGame3/index.html">
+<meta property="og:site_name" content="ivan">
+<meta property="og:description" content="1.这题和其他的几题，例如streamgame1、2、4，有点不一样，因为直接爆破可能性太多了，根本不可行，所以我们有必要好好分析一下。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-11-06T06:50:46.193Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="强网杯 StreamGame3">
+<meta name="twitter:description" content="1.这题和其他的几题，例如streamgame1、2、4，有点不一样，因为直接爆破可能性太多了，根本不可行，所以我们有必要好好分析一下。">
+
+
+
+
+
+
+  <link rel="canonical" href="https://mf-x.github.io/2018/04/03/强网杯-StreamGame3/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>强网杯 StreamGame3 | ivan</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ivan</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Blog</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2018/04/03/强网杯-StreamGame3/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ivan Mo">
+      <meta itemprop="description" content="Practise makes perfect!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ivan">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">强网杯 StreamGame3
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-04-03 14:46:55" itemprop="dateCreated datePublished" datetime="2018-04-03T14:46:55+08:00">2018-04-03</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-11-06 14:50:46" itemprop="dateModified" datetime="2018-11-06T14:50:46+08:00">2018-11-06</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>1.这题和其他的几题，例如streamgame1、2、4，有点不一样，因为直接爆破可能性太多了，根本不可行，所以我们有必要好好分析一下。</p>
+<a id="more"></a>
+<p>2.关于流密码的知识可以Google了解，在这里就不再多说。这道题基本思路是，R1、R2、R3三个初始值，每次经过lfsr轮转，产生新的R1、R2、R3，并且将lastbit经过简单运算<code>out = (x1 * x2) ^ ( (x2 ^ 1) * x3)</code>的到一个out输出。out与tmp进行一系列运算得到最终结果，这题结果总共为1G的数据。（题目下载中只给了1M的，因为已经够了）</p>
+<p>3.而此题的突破点就在那个简单的运算，看一个表:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">x1  x2  x3  out</span><br><span class="line">0   0   0   0</span><br><span class="line">0   0   1   1</span><br><span class="line">0   1   0   0</span><br><span class="line">0   1   1   0</span><br><span class="line">1   0   0   0</span><br><span class="line">1   0   1   1</span><br><span class="line">1   1   0   1</span><br><span class="line">1   1   1   1</span><br></pre></td></tr></table></figure>
+<p>可以发现，x1、x3与out相同的几率很大，约为75%。所以我们可以单独爆破x1、x3，将x1或x3视为out进行加密，然后统计加密结果与正确结果的相同的概率有多少，在75%左右的就是正确答案了，错误答案，理论上来说应该为50%。</p>
+<p>4.在爆破成功了R1、R3之后我们就可以，直接爆破R2了。需要注意的是这里的爆破是根据概率统计来的，所以我们没有必要选全部加密文件来进行统计，选一小部分就可以了（32bit、64bit），因为根据前几题，错误的答案几乎不可能”蒙”出正确答案。</p>
+<p>5.本文参考了队内大佬的文章，文章链接:<code>http://blog.leanote.com/post/xp0intjnu@gmail.com/66c91498d13b</code></p>
+<p>6.详细解决脚本如下，脚本中有注释：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lfsr</span><span class="params">(R,mask)</span>:</span></span><br><span class="line">    output = (R &amp;lt;&amp;lt; <span class="number">1</span>) &amp;amp; <span class="number">0xffffff</span></span><br><span class="line">    i = (R &amp;amp; mask) &amp;amp; <span class="number">0xffffff</span></span><br><span class="line"></span><br><span class="line">    lastbit = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i != <span class="number">0</span>:</span><br><span class="line">        lastbit ^= (i &amp;amp; <span class="number">1</span>)</span><br><span class="line">        i = i &amp;gt;&amp;gt; <span class="number">1</span></span><br><span class="line">    output ^= lastbit</span><br><span class="line">    <span class="keyword">return</span> (output,lastbit)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">single_round</span><span class="params">(R1,R1_mask,R2,R2_mask,R3,R3_mask)</span>:</span></span><br><span class="line"></span><br><span class="line">    (R1_NEW,x1) = lfsr(R1,R1_mask)</span><br><span class="line">    (R2_NEW,x2) = lfsr(R2,R2_mask)</span><br><span class="line">    (R3_NEW,x3) = lfsr(R3,R3_mask)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (R1_NEW, R2_NEW, R3_NEW, (x1*x2)^((x2^<span class="number">1</span>)*x3) )</span><br><span class="line"></span><br><span class="line"><span class="comment"># x1 x2 x3 out</span></span><br><span class="line"><span class="comment">#  0  0  0  0</span></span><br><span class="line"><span class="comment">#  0  0  1  1</span></span><br><span class="line"><span class="comment">#  0  1  0  0</span></span><br><span class="line"><span class="comment">#  0  1  1  0</span></span><br><span class="line"><span class="comment">#  1  0  0  0</span></span><br><span class="line"><span class="comment">#  1  0  1  1</span></span><br><span class="line"><span class="comment">#  1  1  0  1</span></span><br><span class="line"><span class="comment">#  1  1  1  1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 单独用R1、R3进行加密</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">single_lfsr</span><span class="params">(R, R_mask)</span>:</span></span><br><span class="line">    ret = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(length):</span><br><span class="line">        tmp = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">8</span>):</span><br><span class="line">            (R, out) = lfsr(R, R_mask)</span><br><span class="line">            tmp = (tmp &amp;lt;&amp;lt; <span class="number">1</span>) ^ out</span><br><span class="line">        ret += chr(tmp)</span><br><span class="line">    <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计概率</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">count</span><span class="params">(ret)</span>:</span></span><br><span class="line">    cnt = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> r, c <span class="keyword">in</span> zip(ret, cipher):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">8</span>):</span><br><span class="line">            mask = <span class="number">1</span> &amp;lt;&amp;lt; i</span><br><span class="line">            <span class="keyword">if</span> ord(r) &amp;amp; mask == c &amp;amp; mask:</span><br><span class="line">                cnt += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> cnt / (length * <span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 爆破R1</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">guess_r1</span><span class="params">()</span>:</span></span><br><span class="line">    possible = <span class="number">0</span></span><br><span class="line">    percent = <span class="number">0.0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> R1 <span class="keyword">in</span> range(pow(<span class="number">2</span>, <span class="number">16</span>),pow(<span class="number">2</span>, <span class="number">17</span>)):</span><br><span class="line">        ret = single_lfsr(R1, R1_mask)</span><br><span class="line">        per = count(ret)</span><br><span class="line">        <span class="keyword">if</span> per &amp;gt; percent:</span><br><span class="line">            possible, percent = R1, per</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> per &amp;gt; <span class="number">0.7</span>:</span><br><span class="line">            print(<span class="string">'R1: '</span> + hex(R1) + <span class="string">'\tpercentage: '</span> + str(per * <span class="number">100</span>) + <span class="string">'%'</span>)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'R1 max:'</span>,hex(possible), percent)</span><br><span class="line">    <span class="keyword">return</span> possible</span><br><span class="line"></span><br><span class="line"><span class="comment"># 爆破R2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">guess_r3</span><span class="params">()</span>:</span></span><br><span class="line">    possible = <span class="number">0</span></span><br><span class="line">    percent = <span class="number">0.0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> R3 <span class="keyword">in</span> range(pow(<span class="number">2</span>, <span class="number">20</span>), pow(<span class="number">2</span>, <span class="number">21</span>)):</span><br><span class="line">        ret = single_lfsr(R3, R3_mask)</span><br><span class="line">        per = count(ret)</span><br><span class="line">        <span class="keyword">if</span> per &amp;gt; percent:</span><br><span class="line">            possible, percent = R3, per</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> per &amp;gt; <span class="number">0.7</span>:</span><br><span class="line">            print(<span class="string">'R3: '</span> + hex(R3) + <span class="string">'\tpercentage: '</span> + str(per * <span class="number">100</span>) + <span class="string">'%'</span>)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'R3 max:'</span>,hex(possible), percent)</span><br><span class="line">    <span class="keyword">return</span> possible</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模拟部分加密</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encrypt</span><span class="params">(R1, R2, R3)</span>:</span></span><br><span class="line">    ret = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(length):</span><br><span class="line">        tmp = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">8</span>):</span><br><span class="line">            (R1, R2, R3, out) = single_round(R1, R1_mask, R2, R2_mask, R3, R3_mask)</span><br><span class="line">            tmp = (tmp &amp;lt;&amp;lt; <span class="number">1</span>) ^ out</span><br><span class="line">        ret.append(tmp)</span><br><span class="line">    <span class="keyword">return</span> bytes(ret)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 爆破R2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">solve_r2</span><span class="params">(R1, R3)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> R2 <span class="keyword">in</span> range(pow(<span class="number">2</span>, <span class="number">18</span>), pow(<span class="number">2</span>, <span class="number">19</span>)):</span><br><span class="line">        ret = encrypt(R1, R2, R3)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ret == cipher:</span><br><span class="line">            print(<span class="string">'R2:'</span>,R2)</span><br><span class="line">            <span class="keyword">return</span> R2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试的长度（小于32可能得到错误的结果）</span></span><br><span class="line">length = <span class="number">32</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'./output/0'</span>,<span class="string">'rb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    cipher = f.read(length)</span><br><span class="line"></span><br><span class="line">R1_mask = <span class="number">0x10020</span></span><br><span class="line">R2_mask = <span class="number">0x4100c</span></span><br><span class="line">R3_mask = <span class="number">0x100002</span></span><br><span class="line"><span class="comment"># R1、R2、R3的十六进制值在flag中为6为</span></span><br><span class="line">R_len = <span class="number">6</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">R1 = guess_r1()</span><br><span class="line"><span class="comment"># R1 = 0x1b9cb</span></span><br><span class="line"></span><br><span class="line">R3 = guess_r3()</span><br><span class="line"><span class="comment"># R3 = 0x16b2f3</span></span><br><span class="line"></span><br><span class="line">R2 = solve_r2(R1, R3)</span><br><span class="line"><span class="comment"># R2 = 0x5979c</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 补足6位</span></span><br><span class="line">R1 = hex(R1)[<span class="number">2</span>:].zfill(R_len)</span><br><span class="line">R2 = hex(R2)[<span class="number">2</span>:].zfill(R_len)</span><br><span class="line">R3 = hex(R3)[<span class="number">2</span>:].zfill(R_len)</span><br><span class="line">flag = R1 + R2 + R3</span><br><span class="line"></span><br><span class="line">print(<span class="string">'flag&#123;'</span>+flag+<span class="string">'&#125;'</span>)</span><br><span class="line"><span class="comment"># flag=&#123;01b9cb05979c16b2f3&#125;</span></span><br></pre></td></tr></table></figure>
+<p>7.跑脚本需要一定的时间，需要耐心等待，在我电脑上约为18分钟。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/22/ctf-Magic-number/" rel="prev" title="*ctf Magic_number">
+                *ctf Magic_number <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ivan Mo</p>
+              <p class="site-description motion-element" itemprop="description">Practise makes perfect!</p>
+          </div>
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ivan Mo</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=6.5.0"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
