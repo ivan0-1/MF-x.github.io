@@ -108,17 +108,17 @@
 
 
 
-  <meta name="description" content="1.这题和其他的几题，例如streamgame1、2、4，有点不一样，因为直接爆破可能性太多了，根本不可行，所以我们有必要好好分析一下。">
+  <meta name="description" content="介绍这题和其他的几题，例如streamgame1、2、4，有点不一样，因为直接爆破可能性太多了，根本不可行，所以我们有必要好好分析一下。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="强网杯 StreamGame3">
 <meta property="og:url" content="https://mf-x.github.io/2018/04/03/强网杯-StreamGame3/index.html">
 <meta property="og:site_name" content="ivan">
-<meta property="og:description" content="1.这题和其他的几题，例如streamgame1、2、4，有点不一样，因为直接爆破可能性太多了，根本不可行，所以我们有必要好好分析一下。">
+<meta property="og:description" content="介绍这题和其他的几题，例如streamgame1、2、4，有点不一样，因为直接爆破可能性太多了，根本不可行，所以我们有必要好好分析一下。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-11-06T06:50:46.193Z">
+<meta property="og:updated_time" content="2018-11-08T10:07:33.473Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="强网杯 StreamGame3">
-<meta name="twitter:description" content="1.这题和其他的几题，例如streamgame1、2、4，有点不一样，因为直接爆破可能性太多了，根本不可行，所以我们有必要好好分析一下。">
+<meta name="twitter:description" content="介绍这题和其他的几题，例如streamgame1、2、4，有点不一样，因为直接爆破可能性太多了，根本不可行，所以我们有必要好好分析一下。">
 
 
 
@@ -388,7 +388,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-11-06 14:50:46" itemprop="dateModified" datetime="2018-11-06T14:50:46+08:00">2018-11-06</time>
+                <time title="Modified: 2018-11-08 18:07:33" itemprop="dateModified" datetime="2018-11-08T18:07:33+08:00">2018-11-08</time>
               
             
           </span>
@@ -421,17 +421,17 @@
       
 
       
-        <p>1.这题和其他的几题，例如streamgame1、2、4，有点不一样，因为直接爆破可能性太多了，根本不可行，所以我们有必要好好分析一下。</p>
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>这题和其他的几题，例如streamgame1、2、4，有点不一样，因为直接爆破可能性太多了，根本不可行，所以我们有必要好好分析一下。</p>
 <a id="more"></a>
-<p>2.关于流密码的知识可以Google了解，在这里就不再多说。这道题基本思路是，R1、R2、R3三个初始值，每次经过lfsr轮转，产生新的R1、R2、R3，并且将lastbit经过简单运算<code>out = (x1 * x2) ^ ( (x2 ^ 1) * x3)</code>的到一个out输出。out与tmp进行一系列运算得到最终结果，这题结果总共为1G的数据。（题目下载中只给了1M的，因为已经够了）</p>
-<p>3.而此题的突破点就在那个简单的运算，看一个表:</p>
+<h3 id="流密码"><a href="#流密码" class="headerlink" title="流密码"></a>流密码</h3><p>关于流密码的知识可以Google了解，在这里就不再多说。这道题基本思路是，R1、R2、R3三个初始值，每次经过lfsr轮转，产生新的R1、R2、R3，并且将lastbit经过简单运算<code>out = (x1 * x2) ^ ( (x2 ^ 1) * x3)</code>的到一个out输出。out与tmp进行一系列运算得到最终结果，这题结果总共为1G的数据。（题目下载中只给了1M的，因为已经够了）</p>
+<h3 id="爆破R1、R3"><a href="#爆破R1、R3" class="headerlink" title="爆破R1、R3"></a>爆破R1、R3</h3><p>而此题的突破点就在那个简单的运算，看一个表:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">x1  x2  x3  out</span><br><span class="line">0   0   0   0</span><br><span class="line">0   0   1   1</span><br><span class="line">0   1   0   0</span><br><span class="line">0   1   1   0</span><br><span class="line">1   0   0   0</span><br><span class="line">1   0   1   1</span><br><span class="line">1   1   0   1</span><br><span class="line">1   1   1   1</span><br></pre></td></tr></table></figure>
 <p>可以发现，x1、x3与out相同的几率很大，约为75%。所以我们可以单独爆破x1、x3，将x1或x3视为out进行加密，然后统计加密结果与正确结果的相同的概率有多少，在75%左右的就是正确答案了，错误答案，理论上来说应该为50%。</p>
-<p>4.在爆破成功了R1、R3之后我们就可以，直接爆破R2了。需要注意的是这里的爆破是根据概率统计来的，所以我们没有必要选全部加密文件来进行统计，选一小部分就可以了（32bit、64bit），因为根据前几题，错误的答案几乎不可能”蒙”出正确答案。</p>
-<p>5.本文参考了队内大佬的文章，文章链接:<code>http://blog.leanote.com/post/xp0intjnu@gmail.com/66c91498d13b</code></p>
-<p>6.详细解决脚本如下，脚本中有注释：</p>
+<h3 id="爆破R2"><a href="#爆破R2" class="headerlink" title="爆破R2"></a>爆破R2</h3><p>在爆破成功了R1、R3之后我们就可以，直接爆破R2了。需要注意的是这里的爆破是根据概率统计来的，所以我们没有必要选全部加密文件来进行统计，选一小部分就可以了（32bit、64bit），因为根据前几题，错误的答案几乎不可能”蒙”出正确答案。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>本文参考了队内大佬的文章，文章链接:<code>http://blog.leanote.com/post/xp0intjnu@gmail.com/66c91498d13b</code></p>
+<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><p>详细解决脚本如下，脚本中有注释：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lfsr</span><span class="params">(R,mask)</span>:</span></span><br><span class="line">    output = (R &amp;lt;&amp;lt; <span class="number">1</span>) &amp;amp; <span class="number">0xffffff</span></span><br><span class="line">    i = (R &amp;amp; mask) &amp;amp; <span class="number">0xffffff</span></span><br><span class="line"></span><br><span class="line">    lastbit = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i != <span class="number">0</span>:</span><br><span class="line">        lastbit ^= (i &amp;amp; <span class="number">1</span>)</span><br><span class="line">        i = i &amp;gt;&amp;gt; <span class="number">1</span></span><br><span class="line">    output ^= lastbit</span><br><span class="line">    <span class="keyword">return</span> (output,lastbit)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">single_round</span><span class="params">(R1,R1_mask,R2,R2_mask,R3,R3_mask)</span>:</span></span><br><span class="line"></span><br><span class="line">    (R1_NEW,x1) = lfsr(R1,R1_mask)</span><br><span class="line">    (R2_NEW,x2) = lfsr(R2,R2_mask)</span><br><span class="line">    (R3_NEW,x3) = lfsr(R3,R3_mask)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (R1_NEW, R2_NEW, R3_NEW, (x1*x2)^((x2^<span class="number">1</span>)*x3) )</span><br><span class="line"></span><br><span class="line"><span class="comment"># x1 x2 x3 out</span></span><br><span class="line"><span class="comment">#  0  0  0  0</span></span><br><span class="line"><span class="comment">#  0  0  1  1</span></span><br><span class="line"><span class="comment">#  0  1  0  0</span></span><br><span class="line"><span class="comment">#  0  1  1  0</span></span><br><span class="line"><span class="comment">#  1  0  0  0</span></span><br><span class="line"><span class="comment">#  1  0  1  1</span></span><br><span class="line"><span class="comment">#  1  1  0  1</span></span><br><span class="line"><span class="comment">#  1  1  1  1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 单独用R1、R3进行加密</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">single_lfsr</span><span class="params">(R, R_mask)</span>:</span></span><br><span class="line">    ret = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(length):</span><br><span class="line">        tmp = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">8</span>):</span><br><span class="line">            (R, out) = lfsr(R, R_mask)</span><br><span class="line">            tmp = (tmp &amp;lt;&amp;lt; <span class="number">1</span>) ^ out</span><br><span class="line">        ret += chr(tmp)</span><br><span class="line">    <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计概率</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">count</span><span class="params">(ret)</span>:</span></span><br><span class="line">    cnt = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> r, c <span class="keyword">in</span> zip(ret, cipher):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">8</span>):</span><br><span class="line">            mask = <span class="number">1</span> &amp;lt;&amp;lt; i</span><br><span class="line">            <span class="keyword">if</span> ord(r) &amp;amp; mask == c &amp;amp; mask:</span><br><span class="line">                cnt += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> cnt / (length * <span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 爆破R1</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">guess_r1</span><span class="params">()</span>:</span></span><br><span class="line">    possible = <span class="number">0</span></span><br><span class="line">    percent = <span class="number">0.0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> R1 <span class="keyword">in</span> range(pow(<span class="number">2</span>, <span class="number">16</span>),pow(<span class="number">2</span>, <span class="number">17</span>)):</span><br><span class="line">        ret = single_lfsr(R1, R1_mask)</span><br><span class="line">        per = count(ret)</span><br><span class="line">        <span class="keyword">if</span> per &amp;gt; percent:</span><br><span class="line">            possible, percent = R1, per</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> per &amp;gt; <span class="number">0.7</span>:</span><br><span class="line">            print(<span class="string">'R1: '</span> + hex(R1) + <span class="string">'\tpercentage: '</span> + str(per * <span class="number">100</span>) + <span class="string">'%'</span>)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'R1 max:'</span>,hex(possible), percent)</span><br><span class="line">    <span class="keyword">return</span> possible</span><br><span class="line"></span><br><span class="line"><span class="comment"># 爆破R2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">guess_r3</span><span class="params">()</span>:</span></span><br><span class="line">    possible = <span class="number">0</span></span><br><span class="line">    percent = <span class="number">0.0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> R3 <span class="keyword">in</span> range(pow(<span class="number">2</span>, <span class="number">20</span>), pow(<span class="number">2</span>, <span class="number">21</span>)):</span><br><span class="line">        ret = single_lfsr(R3, R3_mask)</span><br><span class="line">        per = count(ret)</span><br><span class="line">        <span class="keyword">if</span> per &amp;gt; percent:</span><br><span class="line">            possible, percent = R3, per</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> per &amp;gt; <span class="number">0.7</span>:</span><br><span class="line">            print(<span class="string">'R3: '</span> + hex(R3) + <span class="string">'\tpercentage: '</span> + str(per * <span class="number">100</span>) + <span class="string">'%'</span>)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'R3 max:'</span>,hex(possible), percent)</span><br><span class="line">    <span class="keyword">return</span> possible</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模拟部分加密</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encrypt</span><span class="params">(R1, R2, R3)</span>:</span></span><br><span class="line">    ret = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(length):</span><br><span class="line">        tmp = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">8</span>):</span><br><span class="line">            (R1, R2, R3, out) = single_round(R1, R1_mask, R2, R2_mask, R3, R3_mask)</span><br><span class="line">            tmp = (tmp &amp;lt;&amp;lt; <span class="number">1</span>) ^ out</span><br><span class="line">        ret.append(tmp)</span><br><span class="line">    <span class="keyword">return</span> bytes(ret)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 爆破R2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">solve_r2</span><span class="params">(R1, R3)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> R2 <span class="keyword">in</span> range(pow(<span class="number">2</span>, <span class="number">18</span>), pow(<span class="number">2</span>, <span class="number">19</span>)):</span><br><span class="line">        ret = encrypt(R1, R2, R3)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ret == cipher:</span><br><span class="line">            print(<span class="string">'R2:'</span>,R2)</span><br><span class="line">            <span class="keyword">return</span> R2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试的长度（小于32可能得到错误的结果）</span></span><br><span class="line">length = <span class="number">32</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'./output/0'</span>,<span class="string">'rb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    cipher = f.read(length)</span><br><span class="line"></span><br><span class="line">R1_mask = <span class="number">0x10020</span></span><br><span class="line">R2_mask = <span class="number">0x4100c</span></span><br><span class="line">R3_mask = <span class="number">0x100002</span></span><br><span class="line"><span class="comment"># R1、R2、R3的十六进制值在flag中为6为</span></span><br><span class="line">R_len = <span class="number">6</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">R1 = guess_r1()</span><br><span class="line"><span class="comment"># R1 = 0x1b9cb</span></span><br><span class="line"></span><br><span class="line">R3 = guess_r3()</span><br><span class="line"><span class="comment"># R3 = 0x16b2f3</span></span><br><span class="line"></span><br><span class="line">R2 = solve_r2(R1, R3)</span><br><span class="line"><span class="comment"># R2 = 0x5979c</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 补足6位</span></span><br><span class="line">R1 = hex(R1)[<span class="number">2</span>:].zfill(R_len)</span><br><span class="line">R2 = hex(R2)[<span class="number">2</span>:].zfill(R_len)</span><br><span class="line">R3 = hex(R3)[<span class="number">2</span>:].zfill(R_len)</span><br><span class="line">flag = R1 + R2 + R3</span><br><span class="line"></span><br><span class="line">print(<span class="string">'flag&#123;'</span>+flag+<span class="string">'&#125;'</span>)</span><br><span class="line"><span class="comment"># flag=&#123;01b9cb05979c16b2f3&#125;</span></span><br></pre></td></tr></table></figure>
-<p>7.跑脚本需要一定的时间，需要耐心等待，在我电脑上约为18分钟。</p>
+<p>跑脚本需要一定的时间，需要耐心等待，在我电脑上约为18分钟。</p>
 
       
     </div>
@@ -512,8 +512,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -525,6 +534,30 @@
 
           
 
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mf-x" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:myf.ilucky@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="/wechat/" target="_blank" title="WeChat"><i class="fa fa-fw fa-weixin"></i>WeChat</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.jnu.edu.cn" target="_blank" title="School"><i class="fa fa-fw fa-graduation-cap"></i>School</a>
+                  
+                </span>
+              
+            </div>
           
 
           
@@ -541,6 +574,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流密码"><span class="nav-number">2.</span> <span class="nav-text">流密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#爆破R1、R3"><span class="nav-number">3.</span> <span class="nav-text">爆破R1、R3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#爆破R2"><span class="nav-number">4.</span> <span class="nav-text">爆破R2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本"><span class="nav-number">6.</span> <span class="nav-text">脚本</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
