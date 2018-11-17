@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://mf-x.github.io/2018/11/18/pwnable-tw-secretgarden/</loc>
+    
+    <lastmod>2018-11-17T17:34:16.546Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mf-x.github.io/2018/11/17/Codegate-CTF-2018-marimo/</loc>
+    
+    <lastmod>2018-11-17T16:18:41.991Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://mf-x.github.io/2018/11/16/CISCN-CTF-2018-task-supermarket/</loc>
     
-    <lastmod>2018-11-16T02:54:53.583Z</lastmod>
+    <lastmod>2018-11-17T15:21:56.788Z</lastmod>
     
   </url>
   
