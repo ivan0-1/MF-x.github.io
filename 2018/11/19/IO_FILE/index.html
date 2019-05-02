@@ -115,7 +115,7 @@
 <meta property="og:site_name" content="ivan">
 <meta property="og:description" content="介绍最近做题遇到好几次攻击IO_FILE结构体的，整理一下相关资料。（抄 ctf wiki ^ - ^） FILE文件结构在标准I/O 库中，每个程序启动时有三个文件流是自动打开的：stdin、stdout、stderr。因此在初始状态下，_IO_list_all 指向了一个有这些文件流构成的链表，但是需要注意的是这三个文件流位于 libc.so的数据段。而我们使用fopen创建的文件流是分配在堆">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-11-19T16:31:31.354Z">
+<meta property="og:updated_time" content="2018-11-19T16:31:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IO_FILE">
 <meta name="twitter:description" content="介绍最近做题遇到好几次攻击IO_FILE结构体的，整理一下相关资料。（抄 ctf wiki ^ - ^） FILE文件结构在标准I/O 库中，每个程序启动时有三个文件流是自动打开的：stdin、stdout、stderr。因此在初始状态下，_IO_list_all 指向了一个有这些文件流构成的链表，但是需要注意的是这三个文件流位于 libc.so的数据段。而我们使用fopen创建的文件流是分配在堆">
@@ -608,7 +608,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright"> &copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
