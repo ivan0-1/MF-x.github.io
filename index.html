@@ -521,7 +521,7 @@
                 
               
 
-              <time title="Created: 2019-05-20 09:02:03 / Modified: 09:21:40" itemprop="dateCreated datePublished" datetime="2019-05-20T09:02:03+08:00">2019-05-20</time>
+              <time title="Created: 2019-05-20 09:02:03 / Modified: 09:55:07" itemprop="dateCreated datePublished" datetime="2019-05-20T09:02:03+08:00">2019-05-20</time>
             
 
             
@@ -560,22 +560,16 @@
 
       
         
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>rctf2019的一道逆向题，上一题的进阶版，但感觉还更简单了。</p>
+          <!--noindex-->
           
-            <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>rctf2019的一道逆向题，上一题的进阶版，但感觉还更简单了。</p>
-<h3 id="分析程序"><a href="#分析程序" class="headerlink" title="分析程序"></a>分析程序</h3><ol>
-<li>输入account，长度为7-16</li>
-<li>输入password，长度为7-16，每个字符为10-99</li>
-<li>将account作为key，对一个定值执行转换操作（操作几乎和上一题一样）</li>
-<li>输入data，长度为0-1024，只允许输入[0-9a-fA-F]</li>
-<li>对password进行转换操作，数据为data（其中要求date的长度为一个较大的值）</li>
-<li>将步骤3的结果进行解密，key为步骤5的结果</li>
-<li>要求解密的结果最后一位小于4</li>
-</ol>
-<h3 id="解答方法"><a href="#解答方法" class="headerlink" title="解答方法"></a>解答方法</h3><p>由于最后的要求很简单，只要最后一位小于4即可，所以随机一些数，进行爆破即可。</p>
-<p>我们的做法是，固定data和password，随机account的值。</p>
-<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">100000</span>):</span><br><span class="line"></span><br><span class="line">    p = process(./babyre2)</span><br><span class="line"></span><br><span class="line">    seed = <span class="string">"1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&amp;*()_+=-"</span></span><br><span class="line">    sa = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">15</span>):</span><br><span class="line">        sa.append(random.choice(seed))</span><br><span class="line">    salt = <span class="string">''</span>.join(sa)</span><br><span class="line"></span><br><span class="line">    account = salt</span><br><span class="line">    password = <span class="string">'123123123'</span></span><br><span class="line">    data = <span class="string">'1'</span> * <span class="number">500</span></span><br><span class="line"></span><br><span class="line">    p.recvuntil(<span class="string">'input the account:'</span>)</span><br><span class="line">    p.send(account)</span><br><span class="line"></span><br><span class="line">    p.recvuntil(<span class="string">'input the password:'</span>)</span><br><span class="line">    p.send(password)</span><br><span class="line"></span><br><span class="line">    p.recvuntil(<span class="string">'input the data:'</span>)</span><br><span class="line">    p.send(data)</span><br><span class="line"></span><br><span class="line">    ret = p.recvline()</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'capture the flag failed, try again!'</span> <span class="keyword">not</span> <span class="keyword">in</span> ret:</span><br><span class="line">        print(account,ret)</span><br><span class="line"></span><br><span class="line">    p.close()</span><br></pre></td></tr></table></figure>
-
-          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/05/20/rctf2019-babyre2/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+         
+          <!--/noindex-->
         
       
     </div>
