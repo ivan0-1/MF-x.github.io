@@ -115,7 +115,7 @@
 <meta property="og:site_name" content="ivan">
 <meta property="og:description" content="介绍rctf2019的一道逆向题，上一题的进阶版，但感觉还更简单了。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-05-20T01:55:07.905Z">
+<meta property="og:updated_time" content="2019-05-21T02:07:53.449Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="rctf2019-babyre2">
 <meta name="twitter:description" content="介绍rctf2019的一道逆向题，上一题的进阶版，但感觉还更简单了。">
@@ -371,12 +371,24 @@
                 
               
 
-              <time title="Created: 2019-05-20 09:02:03 / Modified: 09:55:07" itemprop="dateCreated datePublished" datetime="2019-05-20T09:02:03+08:00">2019-05-20</time>
+              <time title="Created: 2019-05-20 09:02:03" itemprop="dateCreated datePublished" datetime="2019-05-20T09:02:03+08:00">2019-05-20</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-05-21 10:07:53" itemprop="dateModified" datetime="2019-05-21T10:07:53+08:00">2019-05-21</time>
               
             
           </span>
@@ -423,6 +435,7 @@
 <h3 id="解答方法"><a href="#解答方法" class="headerlink" title="解答方法"></a>解答方法</h3><p>由于最后的要求很简单，只要最后一位小于4即可，所以随机一些数，进行爆破即可。</p>
 <p>我们的做法是，固定data和password，随机account的值。</p>
 <h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">100000</span>):</span><br><span class="line"></span><br><span class="line">    p = process(./babyre2)</span><br><span class="line"></span><br><span class="line">    seed = <span class="string">"1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&amp;*()_+=-"</span></span><br><span class="line">    sa = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">15</span>):</span><br><span class="line">        sa.append(random.choice(seed))</span><br><span class="line">    salt = <span class="string">''</span>.join(sa)</span><br><span class="line"></span><br><span class="line">    account = salt</span><br><span class="line">    password = <span class="string">'123123123'</span></span><br><span class="line">    data = <span class="string">'1'</span> * <span class="number">500</span></span><br><span class="line"></span><br><span class="line">    p.recvuntil(<span class="string">'input the account:'</span>)</span><br><span class="line">    p.send(account)</span><br><span class="line"></span><br><span class="line">    p.recvuntil(<span class="string">'input the password:'</span>)</span><br><span class="line">    p.send(password)</span><br><span class="line"></span><br><span class="line">    p.recvuntil(<span class="string">'input the data:'</span>)</span><br><span class="line">    p.send(data)</span><br><span class="line"></span><br><span class="line">    ret = p.recvline()</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'capture the flag failed, try again!'</span> <span class="keyword">not</span> <span class="keyword">in</span> ret:</span><br><span class="line">        print(account,ret)</span><br><span class="line"></span><br><span class="line">    p.close()</span><br></pre></td></tr></table></figure>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>分析基本正确，但是有其他比较优雅的解法。步骤3对定值进行转换的时候，定值的最后一位已经小于4，所以我们只需前后加解密构造一样的密钥即可。也就是构造步骤5的结果和account^0xcc即可。</p>
 
       
     </div>
@@ -579,7 +592,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析程序"><span class="nav-number">2.</span> <span class="nav-text">分析程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解答方法"><span class="nav-number">3.</span> <span class="nav-text">解答方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本"><span class="nav-number">4.</span> <span class="nav-text">脚本</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析程序"><span class="nav-number">2.</span> <span class="nav-text">分析程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解答方法"><span class="nav-number">3.</span> <span class="nav-text">解答方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本"><span class="nav-number">4.</span> <span class="nav-text">脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后记"><span class="nav-number">5.</span> <span class="nav-text">后记</span></a></li></ol></div>
             
 
           </div>

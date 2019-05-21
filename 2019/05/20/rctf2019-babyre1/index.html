@@ -115,7 +115,7 @@
 <meta property="og:site_name" content="ivan">
 <meta property="og:description" content="介绍rctf2019的一道逆向题，终于可以写点不是pwn的东西了。（pwn做不出来）">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-05-20T01:14:17.846Z">
+<meta property="og:updated_time" content="2019-05-21T01:57:35.683Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="rctf2019-babyre1">
 <meta name="twitter:description" content="介绍rctf2019的一道逆向题，终于可以写点不是pwn的东西了。（pwn做不出来）">
@@ -371,12 +371,24 @@
                 
               
 
-              <time title="Created: 2019-05-20 08:34:27 / Modified: 09:14:17" itemprop="dateCreated datePublished" datetime="2019-05-20T08:34:27+08:00">2019-05-20</time>
+              <time title="Created: 2019-05-20 08:34:27" itemprop="dateCreated datePublished" datetime="2019-05-20T08:34:27+08:00">2019-05-20</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-05-21 09:57:35" itemprop="dateModified" datetime="2019-05-21T09:57:35+08:00">2019-05-21</time>
               
             
           </span>
@@ -429,6 +441,8 @@
 <h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><p>脚本使用gdb的dump功能，将255个结果写入到文件中。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">256</span>):</span><br><span class="line"></span><br><span class="line">    p = process(<span class="string">'./babyre_pat'</span>)</span><br><span class="line"></span><br><span class="line">    p.recvuntil(<span class="string">"flag you can got 'Bingo!' :"</span>)</span><br><span class="line"></span><br><span class="line">    gdb.attach(p,<span class="string">'b * $rebase(0x1211)\nc\ndump memory ~/d/1/%02x.txt $rdi $rdi+8\nc\nquit'</span> % x)</span><br><span class="line"></span><br><span class="line">    p.sendline(<span class="string">'557e79707836%02x02'</span> % x)</span><br><span class="line"></span><br><span class="line">    p.interactive()</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">256</span>):</span><br><span class="line"></span><br><span class="line">    f = open(<span class="string">'%02x.txt'</span> % x,<span class="string">'r'</span>)</span><br><span class="line">    flag = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> f.read():</span><br><span class="line">        flag += hex(ord(x))[<span class="number">2</span>:].zfill(<span class="number">2</span>)</span><br><span class="line">    flag = <span class="string">'rctf&#123;'</span> + flag + <span class="string">'&#125;'</span></span><br><span class="line"></span><br><span class="line">    ret = hashlib.md5(flag.encode(<span class="string">'utf8'</span>)).hexdigest()</span><br><span class="line">    <span class="keyword">if</span> ret == <span class="string">'5f8243a662cf71bf31d2b2602638dc1d'</span>:</span><br><span class="line">        print(flag)</span><br><span class="line"></span><br><span class="line">    f.close()</span><br></pre></td></tr></table></figure>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>分析的时候出现了一些错误，这里不是tea加密，而是它的改进xxtea加密。所以我们就不需要patch文件，在用gdbdump出来了。直接用python调用xxtea解密即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> xxtea</span><br><span class="line">xxtea.decrypt(text, key,padding=<span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -585,7 +599,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析程序"><span class="nav-number">2.</span> <span class="nav-text">分析程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解答方法"><span class="nav-number">3.</span> <span class="nav-text">解答方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本"><span class="nav-number">4.</span> <span class="nav-text">脚本</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析程序"><span class="nav-number">2.</span> <span class="nav-text">分析程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解答方法"><span class="nav-number">3.</span> <span class="nav-text">解答方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本"><span class="nav-number">4.</span> <span class="nav-text">脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后记"><span class="nav-number">5.</span> <span class="nav-text">后记</span></a></li></ol></div>
             
 
           </div>
