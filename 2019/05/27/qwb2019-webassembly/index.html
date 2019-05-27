@@ -108,24 +108,24 @@
 
 
 
-  <meta name="description" content="介绍rctf2019的一道逆向题目。">
+  <meta name="description" content="介绍qwb2019的一道逆向题，第一次做wasm的题目，竟然出奇的顺利。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="rctf2019-DontEatMe">
-<meta property="og:url" content="https://mf-x.github.io/2019/05/20/rctf2019-DontEatMe/index.html">
+<meta property="og:title" content="qwb2019-webassembly">
+<meta property="og:url" content="https://mf-x.github.io/2019/05/27/qwb2019-webassembly/index.html">
 <meta property="og:site_name" content="ivan">
-<meta property="og:description" content="介绍rctf2019的一道逆向题目。">
+<meta property="og:description" content="介绍qwb2019的一道逆向题，第一次做wasm的题目，竟然出奇的顺利。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-05-27T12:31:46.613Z">
+<meta property="og:updated_time" content="2019-05-27T12:49:52.526Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="rctf2019-DontEatMe">
-<meta name="twitter:description" content="介绍rctf2019的一道逆向题目。">
+<meta name="twitter:title" content="qwb2019-webassembly">
+<meta name="twitter:description" content="介绍qwb2019的一道逆向题，第一次做wasm的题目，竟然出奇的顺利。">
 
 
 
 
 
 
-  <link rel="canonical" href="https://mf-x.github.io/2019/05/20/rctf2019-DontEatMe/">
+  <link rel="canonical" href="https://mf-x.github.io/2019/05/27/qwb2019-webassembly/">
 
 
 
@@ -135,7 +135,7 @@
   };
 </script>
 
-  <title>rctf2019-DontEatMe | ivan</title>
+  <title>qwb2019-webassembly | ivan</title>
   
 
 
@@ -329,7 +329,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2019/05/20/rctf2019-DontEatMe/">
+    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2019/05/27/qwb2019-webassembly/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ivan Mo">
@@ -346,7 +346,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">rctf2019-DontEatMe
+          <h1 class="post-title" itemprop="name headline">qwb2019-webassembly
               
             
           </h1>
@@ -371,24 +371,12 @@
                 
               
 
-              <time title="Created: 2019-05-20 09:33:37" itemprop="dateCreated datePublished" datetime="2019-05-20T09:33:37+08:00">2019-05-20</time>
+              <time title="Created: 2019-05-27 20:30:52 / Modified: 20:49:52" itemprop="dateCreated datePublished" datetime="2019-05-27T20:30:52+08:00">2019-05-27</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-05-27 20:31:46" itemprop="dateModified" datetime="2019-05-27T20:31:46+08:00">2019-05-27</time>
               
             
           </span>
@@ -421,19 +409,22 @@
       
 
       
-        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>rctf2019的一道逆向题目。</p>
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>qwb2019的一道逆向题，第一次做wasm的题目，竟然出奇的顺利。</p>
 <a id="more"></a>
-<h3 id="分析流程"><a href="#分析流程" class="headerlink" title="分析流程"></a>分析流程</h3><ol>
-<li>生成8个种子固定的”随机数”，并处理（后面分析可知是blowfish的初始化）</li>
-<li>输入flag，并进行hex转换。</li>
-<li>用blowfish进行解密。</li>
-<li>初始化一个迷宫（初始位置为11行6列）</li>
-<li>使用解密后的结果作为迷宫的输入</li>
-<li>如果走到结束则正确（结束位置为5行10列，只能走16步）</li>
+<h3 id="分析方法"><a href="#分析方法" class="headerlink" title="分析方法"></a>分析方法</h3><ol>
+<li>利用GitHub上的wabt可以将他反编译成c源码，不过可读性较差，再次编译一下（不能编译成可执行文件，只能编译成目标文件.o），用ida查看就可以静态调试了。 </li>
+<li>在本地用python开一个http服务，chrome访问，就可以动态调试了。</li>
 </ol>
-<h3 id="解答方法"><a href="#解答方法" class="headerlink" title="解答方法"></a>解答方法</h3><p>用peid查一下，可知有blowfish的特征值，且分析程序发现是ECB模式。</p>
-<p>手动走一下迷宫，结果为<code>ddddwwwaaawwwddd</code>，使用blowfish进行加密就是输入结果。</p>
-<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">1111111111111111</span></span><br><span class="line"><span class="string">1000000000111111</span></span><br><span class="line"><span class="string">1011111110111111</span></span><br><span class="line"><span class="string">1011111110111111</span></span><br><span class="line"><span class="string">101111000e000111</span></span><br><span class="line"><span class="string">1011110111110111</span></span><br><span class="line"><span class="string">1011110111110111</span></span><br><span class="line"><span class="string">1011110000110111</span></span><br><span class="line"><span class="string">1011111110110111</span></span><br><span class="line"><span class="string">1011111110110111</span></span><br><span class="line"><span class="string">10000s0000110111</span></span><br><span class="line"><span class="string">1111101111110111</span></span><br><span class="line"><span class="string">1111100000000111</span></span><br><span class="line"><span class="string">1111111111111111</span></span><br><span class="line"><span class="string">1111111111111111</span></span><br><span class="line"><span class="string">1111111111111111</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ddddwwwaaawwwddd</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> blowfish</span><br><span class="line">cipher = blowfish.Cipher(<span class="string">b"\x00\x0F\x1A\x01\x35\x3A\x3B\x20"</span>)</span><br><span class="line"></span><br><span class="line">step = cipher.encrypt_block(<span class="string">b'ddddwwwa'</span>) + cipher.encrypt_block(<span class="string">b'aawwwddd'</span>)</span><br><span class="line"></span><br><span class="line">flag = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> step:</span><br><span class="line">    flag += hex(x)[<span class="number">2</span>:]</span><br><span class="line"></span><br><span class="line">print(<span class="string">"RCTF&#123;%s&#125;"</span> % flag)</span><br></pre></td></tr></table></figure>
+<h3 id="分析流程"><a href="#分析流程" class="headerlink" title="分析流程"></a>分析流程</h3><ol>
+<li>ida可以看到，main函数是f16函数，其中只调用了f54和f15。 </li>
+<li>动态调试可知，f54为输入函数，f15是应该就是check函数。 </li>
+<li>分析f15，发现是用xtea加密了flag的前32位，密钥为’\x00’*16 </li>
+<li>最后的check是就是用加密的结果依此异或一个值，最后的和要为0，所以每一位都要为0，也就是说异或值就是密文。</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 密钥置0</span></span><br><span class="line">i64_store(Z_envZ_memory, key, <span class="number">0L</span>L);</span><br><span class="line">i64_store(Z_envZ_memory, key + <span class="number">8</span>, <span class="number">0L</span>L);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第一部分加密</span></span><br><span class="line">v38 = i32_load(Z_envZ_memory, input + <span class="number">4</span> );</span><br><span class="line">v53 = i32_load(Z_envZ_memory, input );</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">&#123;</span><br><span class="line">    v53	+= (((v38 &gt;&gt; <span class="number">5</span>) ^ <span class="number">16</span> * v38) + v38) ^ ((<span class="keyword">unsigned</span> __int64) i32_load(Z_envZ_memory, key + <span class="number">4</span> * (v42 &amp; <span class="number">3</span>)) + v42);</span><br><span class="line">    v42	-= <span class="number">0x61C88647</span>;</span><br><span class="line">    v38	+= ((<span class="keyword">unsigned</span> __int64) i32_load(Z_envZ_memory, key + <span class="number">4</span> * ( (v42 &gt;&gt; <span class="number">11</span>) &amp; <span class="number">3</span>)) + v42) ^ (((v53 &gt;&gt; <span class="number">5</span>) ^ <span class="number">16</span> * v53) + v53);</span><br><span class="line">    ++v46;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">while</span> ( v46 != <span class="number">32</span> );</span><br><span class="line">i32_store( Z_envZ_memory, input, v53 );</span><br><span class="line">i32_store( Z_envZ_memory, input + <span class="number">4</span>, v38 );</span><br><span class="line"></span><br><span class="line"><span class="comment">// 最后的check</span></span><br><span class="line">v34 = (((<span class="keyword">unsigned</span> __int64) i32_load8_s( Z_envZ_memory, input + <span class="number">34</span> ) ^ <span class="string">'1'</span>) &amp; <span class="number">0xFF</span>) + v33;</span><br><span class="line">v35 = (((<span class="keyword">unsigned</span> __int64) i32_load8_s( Z_envZ_memory, input + <span class="number">35</span> ) ^ <span class="string">'d'</span>) &amp; <span class="number">0xFF</span>) + v34;</span><br><span class="line">v36 = (((<span class="keyword">unsigned</span> __int64) i32_load8_s( Z_envZ_memory, input + <span class="number">36</span> ) ^ <span class="string">'8'</span>) &amp; <span class="number">0xFF</span>) + v35;</span><br><span class="line"><span class="keyword">if</span> ( v36 == -( ( (<span class="keyword">unsigned</span> <span class="keyword">int</span>) i32_load8_s( Z_envZ_memory, input + <span class="number">37</span> ) ^ <span class="string">'&#125;'</span>) &amp; <span class="number">0xFF</span>) )</span><br><span class="line">&#123;...</span><br></pre></td></tr></table></figure>
+<h3 id="解答方法"><a href="#解答方法" class="headerlink" title="解答方法"></a>解答方法</h3><p>前32为密文用xtea解密，后6位直接用就好了，</p>
+<p>需要注意的是python的xtea是错的，没仔细去看代码，但至少用在这里是不行的。</p>
+<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">decipher</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> num_rounds, <span class="keyword">uint32_t</span> v[<span class="number">2</span>], <span class="keyword">uint32_t</span> <span class="keyword">const</span> key[<span class="number">4</span>])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">uint32_t</span> v0 = v[<span class="number">0</span>], v1 = v[<span class="number">1</span>], delta = <span class="number">0x9E3779B9</span>, sum = delta * num_rounds;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; num_rounds; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        v1 -= (((v0 &lt;&lt; <span class="number">4</span>) ^ (v0 &gt;&gt; <span class="number">5</span>)) + v0) ^ (sum + key[(sum &gt;&gt; <span class="number">11</span>) &amp; <span class="number">3</span>]);</span><br><span class="line">        sum -= delta;</span><br><span class="line">        v0 -= (((v1 &lt;&lt; <span class="number">4</span>) ^ (v1 &gt;&gt; <span class="number">5</span>)) + v1) ^ (sum + key[sum &amp; <span class="number">3</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    v[<span class="number">0</span>] = v0;</span><br><span class="line">    v[<span class="number">1</span>] = v1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">uint32_t</span> <span class="keyword">const</span> k[<span class="number">4</span>] = &#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> r = <span class="number">32</span>;</span><br><span class="line">    <span class="keyword">uint32_t</span> v[<span class="number">9</span>] = &#123;<span class="number">0x617557c1</span>, <span class="number">0x132dd474</span>, <span class="number">0x8ae20062</span>, <span class="number">0xedcb0e50</span>, <span class="number">0x6f202041</span>, <span class="number">0xbefc26d0</span>, <span class="number">0x7767ab98</span>, <span class="number">0x092d7139</span>, <span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i += <span class="number">2</span>)</span><br><span class="line">        decipher(r, &amp;v[i], k);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%s741d8&#125;\n"</span>, (<span class="keyword">char</span> *)v);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -461,8 +452,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/20/rctf2019-babyre2/" rel="next" title="rctf2019-babyre2">
-                <i class="fa fa-chevron-left"></i> rctf2019-babyre2
+              <a href="/2019/05/27/qwb2019-babycpp/" rel="next" title="qwb2019-babycpp">
+                <i class="fa fa-chevron-left"></i> qwb2019-babycpp
               </a>
             
           </div>
@@ -470,10 +461,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/27/qwb2019-babymimic/" rel="prev" title="qwb2019-babymimic">
-                qwb2019-babymimic <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -590,7 +577,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析流程"><span class="nav-number">2.</span> <span class="nav-text">分析流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解答方法"><span class="nav-number">3.</span> <span class="nav-text">解答方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本"><span class="nav-number">4.</span> <span class="nav-text">脚本</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析方法"><span class="nav-number">2.</span> <span class="nav-text">分析方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析流程"><span class="nav-number">3.</span> <span class="nav-text">分析流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解答方法"><span class="nav-number">4.</span> <span class="nav-text">解答方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本"><span class="nav-number">5.</span> <span class="nav-text">脚本</span></a></li></ol></div>
             
 
           </div>
