@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.5.0',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '7MJODQTH3W',
+      apiKey: 'd8c6f430a78a240fd1e1b165418d1c45',
+      indexName: 'Github',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="实习工作涉及到了snort，正巧毕业设计也打算做snort相关的内容，所以开始学习snort相关内容。 今日成果 编译安装snort3 安装Sourcetrail，并导入snort3 运行snort并解决错误">
+<meta property="og:type" content="article">
+<meta property="og:title" content="snort学习笔记-01">
+<meta property="og:url" content="https://mf-x.github.io/2019/12/14/snort学习笔记-01/index.html">
+<meta property="og:site_name" content="ivan">
+<meta property="og:description" content="实习工作涉及到了snort，正巧毕业设计也打算做snort相关的内容，所以开始学习snort相关内容。 今日成果 编译安装snort3 安装Sourcetrail，并导入snort3 运行snort并解决错误">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-12-15T17:34:54.824Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="snort学习笔记-01">
+<meta name="twitter:description" content="实习工作涉及到了snort，正巧毕业设计也打算做snort相关的内容，所以开始学习snort相关内容。 今日成果 编译安装snort3 安装Sourcetrail，并导入snort3 运行snort并解决错误">
+
+
+
+
+
+
+  <link rel="canonical" href="https://mf-x.github.io/2019/12/14/snort学习笔记-01/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>snort学习笔记-01 | ivan</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ivan</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Blog</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mf-x.github.io/2019/12/14/snort学习笔记-01/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ivan Mo">
+      <meta itemprop="description" content="Practise makes perfect!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ivan">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">snort学习笔记-01
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-12-14 20:46:02" itemprop="dateCreated datePublished" datetime="2019-12-14T20:46:02+08:00">2019-12-14</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-12-16 01:34:54" itemprop="dateModified" datetime="2019-12-16T01:34:54+08:00">2019-12-16</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>实习工作涉及到了snort，正巧毕业设计也打算做snort相关的内容，所以开始学习snort相关内容。</p>
+<h3 id="今日成果"><a href="#今日成果" class="headerlink" title="今日成果"></a>今日成果</h3><ol>
+<li>编译安装snort3</li>
+<li>安装Sourcetrail，并导入snort3</li>
+<li>运行snort并解决错误</li>
+</ol>
+<a id="more"></a>
+<h3 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h3><p>安装snort的方法在git上有，一共就三句话，比较麻烦的还是安装其他的依赖</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure_cmake.sh --prefix=<span class="variable">$my_path</span></span><br><span class="line"><span class="built_in">cd</span> build</span><br><span class="line">make -j $(nproc) install</span><br></pre></td></tr></table></figure>
+<p>安装依赖</p>
+<ol>
+<li>PkgConfig    <code>apt install pkg-config</code></li>
+<li>libdaq    <code>git clone https://github.com/snort3/libdaq.git</code><ul>
+<li>LIBTOOL <code>apt install libtool</code></li>
+</ul>
+</li>
+<li>dnet <code>git clone https://github.com/dugsong/libdnet.git</code><ul>
+<li><code>https://github.com/jncornett/libdnet/commit/034d60b6c62ccb547590dfa2a9301cea50fcd13d</code></li>
+</ul>
+</li>
+<li>hwloc <code>https://www.open-mpi.org/software/hwloc/v2.1/</code></li>
+<li>luajit <code>git clone http://luajit.org/git/luajit-2.0.git</code></li>
+<li>OpenSSL <code>apt install libssl-dev</code></li>
+<li>Libpcap <code>http://www.tcpdump.org</code><ul>
+<li>flex <code>apt install flex</code></li>
+<li>Bison <code>apt install bison</code></li>
+</ul>
+</li>
+<li>Libpcre <code>https://ftp.pcre.org/pub/pcre/</code></li>
+<li>ZLIB <code>apt install zlib1g zlib1g-dev</code></li>
+</ol>
+<p>只要执行configure_cmake.sh没有错误了，编译就十分简单了，但最好在编译之前执行<code>/sbin/ldconfig</code>。编译出来的可执行文件在<code>$my_path/bin/snort</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> ,,_     -*&gt; Snort++ &lt;*-</span><br><span class="line">o&quot;  )~   Version 3.0.0 (Build 266)</span><br><span class="line"> &apos;&apos;&apos;&apos;    By Martin Roesch &amp; The Snort Team</span><br><span class="line">         http://snort.org/contact#team</span><br><span class="line">         Copyright (C) 2014-2019 Cisco and/or its affiliates. All rights reserved.</span><br><span class="line">         Copyright (C) 1998-2013 Sourcefire, Inc., et al.</span><br><span class="line">         Using DAQ version 3.0.0</span><br><span class="line">         Using LuaJIT version 2.0.5</span><br><span class="line">         Using OpenSSL 1.1.1  11 Sep 2018</span><br><span class="line">         Using libpcap version 1.8.1</span><br><span class="line">         Using PCRE version 8.43 2019-02-23</span><br><span class="line">         Using ZLIB version 1.2.11</span><br></pre></td></tr></table></figure>
+<h3 id="Sourcetrail"><a href="#Sourcetrail" class="headerlink" title="Sourcetrail"></a>Sourcetrail</h3><p>Sourcetrail是一个很方便阅读源代码的程序，它可以全局搜索函数、变量、结构体等等，而且也支持模糊匹配。同时还可以分析出引用、定义、调用关系等，是一个阅读开源代码十分方便的工具。</p>
+<p>此工具是跨平台的，但是在导入项目的时候也会涉及到编译器、头文件等东西，所以如果是Linux项目，还是建议使用Linux版的Sourcetrail。</p>
+<p>第一次使用的时候，导入项目是个麻烦的事情，建议直接看官方文档，还有视频讲解，导入snort还是十分简单的。</p>
+<p><code>https://www.sourcetrail.com/documentation/#CreatingaNewProject</code></p>
+<h3 id="排错"><a href="#排错" class="headerlink" title="排错"></a>排错</h3><p>安装以上方法安装完snort，进行测试，测试命令为<code>./snort -r test.pcap</code>，会发现报错。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Could not find requested DAQ module: pcap</span><br><span class="line">Commencing packet processing</span><br><span class="line">Couldn&apos;t construct a DAQ instance: Can&apos;t instantiate without a configuration! (-7)</span><br></pre></td></tr></table></figure>
+<p>Google或者官方论坛去搜索这个错误，会发现都只给了一个解决办法就是<code>--daq-dir=/usr/local/lib/daq</code>，但是我试了很多次发现是没有用的。</p>
+<p>下面记录一下这个错误的踩坑记录：</p>
+<ol>
+<li><p>首先搜索报错信息<code>Couldn&#39;t construct a DAQ instance</code></p>
+<ul>
+<li><p><code>./src/packet_io/sfdaq_instance.cc:76:        ErrorMessage(&quot;Couldn&#39;t construct a DAQ instance: %s (%d)\n&quot;, buf, rval);</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> SFDAQInstance::init(DAQ_Config_h daqcfg, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; bpf_string)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">256</span>] = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">int</span> rval;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Reuse the main DAQ instance configuration with the input specification specific to this instance. */</span></span><br><span class="line">    daq_config_set_input(daqcfg, input_spec.c_str());</span><br><span class="line">    <span class="keyword">if</span> ((rval = daq_instance_instantiate(daqcfg, &amp;instance, buf, <span class="keyword">sizeof</span>(buf))) != DAQ_SUCCESS)</span><br><span class="line">    &#123;</span><br><span class="line">        ErrorMessage(<span class="string">"Couldn't construct a DAQ instance: %s (%d)\n"</span>, buf, rval);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  ......</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>再去找<code>daq_instance_instantiate</code>函数，这个函数在libdaq的源码里面</p>
+<ul>
+<li><p><code>./api/daq_mod_ops.c:163:DAQ_LINKAGE int daq_instance_instantiate(const DAQ_Config_h config, DAQ_Instance_t **instance_ptr, char *errbuf, size_t len)</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">DAQ_LINKAGE <span class="keyword">int</span> <span class="title">daq_instance_instantiate</span><span class="params">(<span class="keyword">const</span> DAQ_Config_h config, DAQ_Instance_t **instance_ptr, <span class="keyword">char</span> *errbuf, <span class="keyword">size_t</span> len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/* Don't do this. */</span></span><br><span class="line">    <span class="keyword">if</span> (!errbuf)</span><br><span class="line">        <span class="keyword">return</span> DAQ_ERROR;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!config)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">snprintf</span>(errbuf, len, <span class="string">"Can't instantiate without a configuration!"</span>);</span><br><span class="line">        <span class="keyword">return</span> DAQ_ERROR_INVAL;</span><br><span class="line">    &#125;</span><br><span class="line">  ......</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>知道错误的原因是第一个参数<code>config</code>为空，也就是<code>daqctg</code>为空，查看<code>SFDAQInstance::init</code>的引用，发现只在<code>SFDAQ::init_instance</code>中调用，且从这里可以看出<code>daqctg</code>是一个全局变量。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> SFDAQ::init_instance(SFDAQInstance* instance, <span class="keyword">const</span> <span class="built_in">string</span>&amp; bpf_string)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> instance-&gt;init(daqcfg, bpf_string);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看全局变量<code>daqctg</code>的引用，发现了一个函数<code>AddDaqModuleConfig</code>，并且在这个函数中发现了另一句报错文本<code>Could not find requested DAQ module: pcap</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">AddDaqModuleConfig</span><span class="params">(<span class="keyword">const</span> SFDAQModuleConfig *dmc)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>* module_name = dmc-&gt;name.c_str();</span><br><span class="line">    DAQ_Module_h <span class="keyword">module</span> = daq_find_module(module_name);</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">module</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        ErrorMessage(<span class="string">"Could not find requested DAQ module: %s\n"</span>, module_name);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  ......</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以看出了，出错原因是因为<code>daq_find_module</code>失败了。再去libdaq的源码中寻找这个函数。</p>
+<ul>
+<li><p><code>./api/daq_base.c:105:DAQ_LINKAGE const DAQ_ModuleAPI_t *daq_find_module(const char *name)</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">DAQ_LINKAGE <span class="keyword">const</span> DAQ_ModuleAPI_t *<span class="title">daq_find_module</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    DAQ_ListNode_t *node;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!name)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (node = module_list; node; node = node-&gt;next)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(name, node-&gt;<span class="keyword">module</span>-&gt;name))</span><br><span class="line">            <span class="keyword">return</span> node-&gt;<span class="keyword">module</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>函数遍历了一个链表，去寻找<code>pcap</code>这个<code>module</code>。很可惜的是，修改源码打印<code>module_list</code>，的确没找到。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">node-&gt;module-&gt;name: trace</span><br><span class="line">node-&gt;module-&gt;name: fst</span><br><span class="line">node-&gt;module-&gt;name: afpacket</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>再次执行<code>libdaq</code>的<code>./configure</code>，发现显示<code>pcap</code>是成功的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Build AFPacket DAQ module.. : yes</span><br><span class="line">Build BPF DAQ module....... : yes</span><br><span class="line">Build Divert DAQ module.... : no</span><br><span class="line">Build Dump DAQ module...... : yes</span><br><span class="line">Build FST DAQ module....... : yes</span><br><span class="line">Build NFQ DAQ module....... : no</span><br><span class="line">Build PCAP DAQ module...... : yes</span><br><span class="line">Build netmap DAQ module.... : no</span><br><span class="line">Build Trace DAQ module..... : yes</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>暂时陷入僵局，查看<code>libdaq</code>的文档，发现其中一个<code>README</code>提到了<code>libpcap</code>的版本建议是<code>1.9.0</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cat ./libdaq/modules/pcap/README.pcap.md</span><br><span class="line"></span><br><span class="line">Requirements</span><br><span class="line">------------</span><br><span class="line">* libpcap &gt;= 1.5.0</span><br><span class="line">    (LibPCAP 1.9.0 is available at the time of writing and is recommended.)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重新安装<code>libpcap</code>，版本由<code>1.9.1</code>修改为<code>1.9.0</code>，并没有任何改变。突发奇想，再次执行编译<code>snort</code>的命令<code>./configure_cmake.sh --prefix=$my_path</code>，发现<code>DAQ Modules</code>中没有<code>pcap</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Feature options:</span><br><span class="line">    DAQ Modules:    Static (afpacket;fst;trace)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重新分析一遍安装流程，发现<code>libpcap</code>是在<code>libdaq</code>后安装的，所以在编译安装<code>libdaq</code>时候，是没有<code>libpcap</code>的，但是那时候没注意<code>configure</code>中<code>Build PCAP DAQ module</code>是<code>No</code>，而在之后检查的时候，已经安装了<code>libpcap</code>，所以再次执行<code>libdaq</code>的<code>configure</code>的时候，会显示<code>Build PCAP DAQ module</code>是<code>Yes</code>的，<strong>因此解决办法十分简单，重新编译安装一次<code>libdaq</code>即可。</strong> 再次执行<code>snort3</code>的<code>./configure_cmake.sh</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Feature options:</span><br><span class="line">    DAQ Modules:    Static (afpacket;bpf;dump;fst;pcap;trace)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>既然<code>DAQ Modules</code>中已经出现了<code>pcap</code>,那么在编译安装一次<code>snort3</code>即可，再次执行测试命令<code>./snort -r test.pcap</code>，成功无报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pcap DAQ configured to read-file.</span><br><span class="line">Commencing packet processing</span><br><span class="line">++ [0] test.pcap</span><br><span class="line">-- [0] test.pcap</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>总的来说还是不错的，迈出了第一步，成功运行了<code>snort3</code>，并已经开始尝试读源码，感觉并没有想象中的困难，但也还有一些改进之处。</p>
+<ol>
+<li>现有的工作流十分复杂，命令操作和文本编辑都在<code>Mac OS</code>上，但<code>snort虚拟机</code>在新装的<code>Windows</code>上，而两边无法共享剪贴板，操作繁琐，之后考虑购入罗技鼠标解决剪贴板共享问题</li>
+<li>此次复杂的排错本来是可以避免的，主要是在执行完<code>configure</code>应该仔细阅读结果，而不能只看有没有报错。</li>
+<li>经过<code>b&#39;5p2O&#39;</code>同学的提醒，对<code>snort</code>安装，官网有十分详细文档<code>https://snort.org/documents</code>，按照官网的安装，可以多出很多其他的功能，包括<code>Hyperscan</code>、<code>FlatBuffers</code>、<code>LZMA</code>等，所以按照官网流程还是很有必要的。由于暂时用不到这些功能，所以之后有必要在安装吧。</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/23/切换home目录/" rel="next" title="切换home目录">
+                <i class="fa fa-chevron-left"></i> 切换home目录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ivan Mo</p>
+              <p class="site-description motion-element" itemprop="description">Practise makes perfect!</p>
+          </div>
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mf-x" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:myf.ilucky@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="/wechat/" target="_blank" title="WeChat"><i class="fa fa-fw fa-weixin"></i>WeChat</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.jnu.edu.cn" target="_blank" title="School"><i class="fa fa-fw fa-graduation-cap"></i>School</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#今日成果"><span class="nav-number">1.</span> <span class="nav-text">今日成果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译安装"><span class="nav-number">2.</span> <span class="nav-text">编译安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sourcetrail"><span class="nav-number">3.</span> <span class="nav-text">Sourcetrail</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#排错"><span class="nav-number">4.</span> <span class="nav-text">排错</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ivan Mo</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=6.5.0"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
